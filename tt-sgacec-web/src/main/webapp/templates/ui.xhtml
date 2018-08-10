@@ -1,0 +1,142 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+	
+	<f:view>
+		<h:head>
+			<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+			<meta http-equiv="Cache-Control" content="no-cache, must-revalidate" />
+			<meta http-equiv="Pragma" content="no-cache" />
+			<meta http-equiv="Expires" content="-1"/>		
+					
+			<ui:insert name="head" />
+			
+			<title>
+				<ui:insert name="title">
+					#{i18n['app.label.title']}
+				</ui:insert>
+			</title>
+			
+			<link type="text/css" rel="stylesheet" href="#{request.contextPath}/resources/css/ui.css" />
+			<link rel="shortcut icon" type="image/x-icon" href="#{request.contextPath}/resources/images/favicon.ico"/>
+			
+			<script type="text/javascript" src="#{request.contextPath}/resources/js/jquery.js"></script>
+	  		<script type="text/javascript" src="#{request.contextPath}/resources/js/easySlider1.7.js"></script>
+	  		<script type="text/javascript" src="#{request.contextPath}/resources/js/common.js"></script>
+	  		<script type="text/javascript" src="#{request.contextPath}/resources/js/utils.js"></script>
+	  		
+			<h:outputScript library="js" name="jquery.js" target="head" />
+			
+			<style>	
+				<!-- El estilo se aplica solamente cuando se utiliza IE -->
+				.header_bck {
+					background: url(../img/bg_wrapper.png) repeat-x scroll 0 0 #ECECEC;
+					border-bottom: 1px solid #FFF;
+					height: 42px;
+					vertical-align:top;
+					position:relative;
+					margin-left:180px;
+					width: 123px;
+				}
+				
+				.wrapperIE {
+					filter:none;
+				}
+				
+				.footeri_IE {
+					background-color: #5A5A5A;
+					bottom: 0;
+					height: 95px;
+					left: 0;
+					padding: 30px 0 15px;
+				}
+				
+				.div_content_footer {
+					background-color: #5A5A5A;
+				}
+				
+				.bckcolorfooter {
+					background-color: #5A5A5A;
+				}
+			</style>
+		</h:head>
+		
+		<h:body>
+			<h:outputText value="#{controlador.form}" />
+			<p:ajaxStatus onstart="PF('statusDialog').show();" onsuccess="PF('statusDialog').hide();" />
+			<ui:include src="/templates/reintentarSession.xhtml" />
+			
+			<p:dialog modal="true" widgetVar="statusDialog" header="Procesando..." draggable="false" closable="false" resizable="false">
+				<p:graphicImage value="/resources/images/ajax-loader.gif" />  
+			</p:dialog>
+			
+			<h:form id="#{idForm}">
+				<ui:insert name="contentHead">
+					<ui:include src="header.xhtml" />
+				</ui:insert>
+				
+				<div id="main_wrapper" class="content">
+					<div id="wrapper_ie" class="wrapper">
+						<div class="inicio_sesion">
+							<h1>
+								Bienvenid@: 
+								<span class="texto_sesion">
+									<h:outputText value="#{inicioDataManager.usuario.nombres} #{inicioDataManager.usuario.apellidos}" />
+								</span>
+							</h1>
+							<h:outputLink id="salirOutputLink" styleClass="ui-icon ui-icon-power cerrar_sesion" value="#{request.contextPath}/logout.jsp">
+								<h:outputText value="Salir" />
+							</h:outputLink>
+						</div>
+						
+						<div>
+							<h1 class="wrapper_h1" align="right">
+								<h:outputText value="#{tituloPaginaActual}" styleClass="titulosPrincipales"/>
+							</h1>
+						</div>
+						
+						<div class="contenido_info" style="margin: 25px auto auto; width: 97% !important;">
+							<div class="campos_consulta">
+								<p:messages id="mensajes" autoUpdate="true" closable="true" />
+								<ui:insert name="contentBody" />
+							</div>
+						</div>
+					</div>
+				</div>
+				<br />
+				<div>
+					<div class="piePagina">
+						<ui:insert name="contentBottom">
+							<ui:include src="copyright.xhtml" />
+						</ui:insert>
+					</div>
+				</div>
+			</h:form>
+			
+			<script type="text/javascript">
+				/*<![CDATA[*/
+					var navegador=navigator.userAgent;
+					
+					if (navegador.indexOf('MSIE') != -1) {
+						$('#header_bck').addClass("header_bck");
+						$('#pie_td').addClass("footeri_IE");
+						$('#div_content_footer').addClass("div_content_footer");
+						$('#bckcolorfooter').addClass("bckcolorfooter");
+						$('#divContentHeader').addClass("divContentHeader");
+						$('#wrapperIE').addClass("wrapperIE");
+					} else if (navegador.indexOf('Firefox') != -1) {
+					
+					} else if (navegador.indexOf('Chrome') != -1) {
+						$('#wrapperIE').addClass("wrapper_consulta");
+					}
+				/*]]>*/
+			</script>
+			
+			<ui:insert name="modal" />
+		</h:body>
+	</f:view>
+</html>

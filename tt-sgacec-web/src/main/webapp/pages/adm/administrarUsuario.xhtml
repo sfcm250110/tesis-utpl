@@ -1,0 +1,294 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:s="http://java.sun.com/jsf/composite/components"
+	template="/templates/ui.xhtml">
+	
+	<ui:param name="idForm" 	            value="frmAdministrarUsuario" />
+	<ui:param name="form"               	value="#{usuarioController.form}" />
+	<ui:param name="controlador"        	value="#{usuarioController}" />
+	<ui:param name="tituloMenuActual"       value="Administrar Usuarios" />
+	<ui:param name="tituloOpcionUsuario"   	value="Administraci&#243;n Usuarios" />
+	<ui:param name="tituloPaginaActual" 	value="ADMINISTRAR USUARIOS" />
+	
+	<ui:define name="contentBody">
+		<h:panelGroup id="admUsuariosPanelGroupId">
+			<h:panelGroup id="crearUsuariosPanelGroupId" rendered="#{usuarioDataManager.mostrarCrearUsuario}">
+				<p:panel id="crearUsuariosPanelId">
+					<h:outputText value="Informaci&#243;n del Usuario" styleClass="subtitulos" />
+					<h:panelGrid id="informacionCrearUsuarioPanelGridId" columns="4" cellpadding="0" cellspacing="0" border="0" columnClasses="labelFormulario, contentFormulario, labelFormulario, contentFormulario">
+						<p:outputLabel value="Nombres:" />
+						<p:inputText value="#{usuarioDataManager.crearUsuario.nombres}" required="true" requiredMessage="Nombres son requeridos." />
+						<p:outputLabel value="Apellido:" />
+						<p:inputText value="#{usuarioDataManager.crearUsuario.apellidos}" required="true" requiredMessage="Apellidos son requeridos." />
+						
+						<p:outputLabel value="C.I./R.U.C.:" />
+						<p:inputText value="#{usuarioDataManager.crearUsuario.cedulaRuc}" required="true" requiredMessage="C.I./R.U.C. es requerido." />
+						<p:outputLabel value="Email:" />
+						<p:inputText value="#{usuarioDataManager.crearUsuario.email}" required="true" requiredMessage="Email es requerido." />
+						
+						<p:outputLabel value="Clave:" />
+						<p:inputText value="#{usuarioDataManager.crearUsuario.claveUno}" required="true" requiredMessage="Clave es requerido." />
+						<p:outputLabel value="Direcci&#243;n:" />
+						<p:inputText value="#{usuarioDataManager.crearUsuario.direccion}" required="true" requiredMessage="Direcci&#243;n es requerido." />
+						
+						<p:outputLabel value="Tel&#233;fono Celular:" />
+						<p:inputText value="#{usuarioDataManager.crearUsuario.telefonoCelular}" required="true" requiredMessage="Tel&#233;fono Celular es requerido." />
+						<p:outputLabel value="Tel&#233;fono Convencional:" />
+						<p:inputText value="#{usuarioDataManager.crearUsuario.telefonoConvencional}" required="true" requiredMessage="Tel&#233;fono Convencional es requerido." />
+						
+						<p:outputLabel value="Pregunta Seguridad:" />
+						<p:selectOneMenu value="#{usuarioDataManager.crearUsuario.preguntaSeguridad.idPreguntaSeguridad}" required="true" requiredMessage="Pregunta Seguridad es requerido." styleClass="withSelectOneMenu">
+							<f:selectItem itemLabel="Seleccione ..." itemValue="" />
+							<f:selectItems value="#{usuarioDataManager.preguntasSeguridadSelectItem}" />
+						</p:selectOneMenu>
+						<p:outputLabel value="Respuesta Seguridad:" />
+						<p:inputText value="#{usuarioDataManager.crearUsuario.respuestaSeguridad}" required="true" requiredMessage="Respuesta Pregunta Seguridad es requerido." />
+						
+						<p:outputLabel value="Rol:" />
+						<p:selectOneMenu value="#{usuarioDataManager.rol.idRol}" required="true" requiredMessage="Rol es requerido." styleClass="withSelectOneMenu">
+							<f:selectItem itemLabel="Seleccione ..." itemValue="" />
+							<f:selectItems value="#{usuarioDataManager.rolesSelectItem}" />
+						</p:selectOneMenu>
+						<p:outputLabel value="#{i18n['lbl.estado']}:" />
+						<p:selectOneMenu
+							value="#{usuarioDataManager.crearUsuario.estado}"
+							styleClass="withSelectOneMenu"
+							required="true"
+							requiredMessage="#{i18n['lbl.estado']} #{i18n['txt.requerido']}">
+							<f:selectItem itemLabel="Seleccione..." />
+							<f:selectItems
+								value="#{usuarioDataManager.estados}"
+								var="estado"
+								itemLabel="#{estado.name}"
+								itemValue="#{estado.value}">
+							</f:selectItems>
+						</p:selectOneMenu>
+					</h:panelGrid>
+				</p:panel>
+				<p:spacer height="15" />
+				<p:panel id="crearUsuarioEmpresasPanelId">
+					<h:outputText value="Informaci&#243;n de la Empresas" styleClass="subtitulos" />
+					<p:spacer height="10" />
+					<p:selectManyCheckbox value="#{usuarioDataManager.empresasSelect}" layout="grid" columns="1" converter="empresaConverter" required="true" requiredMessage="#{i18n['menu.item.empresa']} #{i18n['txt.requerido']}">
+						<f:selectItems value="#{usuarioDataManager.empresas}" var="empresa" itemLabel="#{empresa.nombre}" itemValue="#{empresa}" />
+					</p:selectManyCheckbox>
+					<f:facet name="footer">
+						<div align="center">
+							<h:panelGroup styleClass="barraInferior">
+								<p:commandButton
+									id="crearUsuarioCommandLinkId"
+									action="#{usuarioController.crearUsuario}"
+									update=":frmAdministrarUsuario:mensajes :frmAdministrarUsuario:admUsuariosPanelGroupId"
+									ajax="true"
+									process="@form"
+									value="Crear"
+									title="Crear el Usuario"
+									icon="ui-icon-disk"
+									styleClass="boton">
+								</p:commandButton>
+								<h:outputText value="&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;" />
+								<p:commandButton
+									id="cancelarCrearCommandLinkId"
+									action="#{usuarioController.cancelarIn}"
+									update=":frmAdministrarUsuario:mensajes :frmAdministrarUsuario:admUsuariosPanelGroupId"
+									ajax="true"
+									process="@this"
+									value="Cancelar"
+									title="Cancelar"
+									icon="ui-icon-cancel"
+									styleClass="boton">
+								</p:commandButton>
+							</h:panelGroup>
+						</div>
+					</f:facet>
+				</p:panel>
+			</h:panelGroup>
+			
+			<h:panelGroup id="modificarUsuariosPanelGroupId" rendered="#{usuarioDataManager.mostrarModificarUsuario}">
+				<p:panel id="modificarUsuariosPanelId">
+					<h:outputText value="Informaci&#243;n del Usuario" styleClass="subtitulos" />
+					<h:panelGrid id="informacionUsuarioModificarPanelGridId" columns="4" cellpadding="0" cellspacing="0" border="0" columnClasses="labelFormulario, contentFormulario, labelFormulario, contentFormulario">
+						<p:outputLabel value="Nombres:" />
+						<p:inputText value="#{usuarioDataManager.modificarUsuario.nombres}" required="true" requiredMessage="Nombres son requeridos." />
+						<p:outputLabel value="Apellido:" />
+						<p:inputText value="#{usuarioDataManager.modificarUsuario.apellidos}" required="true" requiredMessage="Apellidos son requeridos." />
+						
+						<p:outputLabel value="C.I./R.U.C.:" />
+						<p:inputText value="#{usuarioDataManager.modificarUsuario.cedulaRuc}" required="true" requiredMessage="C.I./R.U.C. es requerido." maxlength="13" onkeypress="return soloNumeros(event);" />
+						<p:outputLabel value="Email:" />
+						<p:inputText value="#{usuarioDataManager.modificarUsuario.email}" required="true" requiredMessage="Email es requerido." />
+						
+						<p:outputLabel value="Direcci&#243;n:" />
+						<p:inputText value="#{usuarioDataManager.modificarUsuario.direccion}" required="true" requiredMessage="Direcci&#243;n es requerido." />
+						<p:outputLabel value="Clave:" />
+						<p:inputText value="#{usuarioDataManager.modificarUsuario.claveUno}" required="true" requiredMessage="Clave es requerido." />
+						
+						<p:outputLabel value="Tel&#233;fono Celular:" />
+						<p:inputText value="#{usuarioDataManager.modificarUsuario.telefonoCelular}" required="true" requiredMessage="Tel&#233;fono Celular es requerido." />
+						<p:outputLabel value="Tel&#233;fono Convencional:" />
+						<p:inputText value="#{usuarioDataManager.modificarUsuario.telefonoConvencional}" required="true" requiredMessage="Tel&#233;fono Convencional es requerido." />
+						
+						<p:outputLabel value="Pregunta Seguridad:" />
+						<p:selectOneMenu value="#{usuarioDataManager.modificarUsuario.preguntaSeguridad.idPreguntaSeguridad}" required="true" requiredMessage="Pregunta Seguridad es requerido." styleClass="withSelectOneMenu">
+							<f:selectItem itemLabel="Seleccione ..." itemValue="" />
+							<f:selectItems value="#{usuarioDataManager.preguntasSeguridadSelectItem}" />
+						</p:selectOneMenu>
+						<p:outputLabel for="respuestaSeguridadUnoModificarOutputLabelId" value="Respuesta Seguridad:" />
+						<p:inputText id="respuestaSeguridadUnoModificarOutputLabelId" value="#{usuarioDataManager.modificarUsuario.respuestaSeguridad}" required="true" requiredMessage="Respuesta Pregunta Seguridad es requerido." />
+						
+						<p:outputLabel value="Rol:" />
+						<p:selectOneMenu value="#{usuarioDataManager.rol.idRol}" required="true" requiredMessage="Rol es requerido." styleClass="withSelectOneMenu">
+							<f:selectItem itemLabel="Seleccione ..." itemValue="" />
+							<f:selectItems value="#{usuarioDataManager.rolesSelectItem}" />
+						</p:selectOneMenu>
+						<p:outputLabel value="Estado:" />
+						<p:selectOneMenu
+							value="#{usuarioDataManager.modificarUsuario.estado}"
+							required="true"
+							styleClass="withSelectOneMenu"
+							requiredMessage="#{msg['label.estado']} #{msg['txt.requerido']}">
+							<f:selectItem itemLabel="Seleccione..." />
+							<f:selectItems
+								value="#{usuarioDataManager.estados}"
+								var="estado"
+								itemLabel="#{estado.name}"
+								itemValue="#{estado.value}">
+							</f:selectItems>
+						</p:selectOneMenu>
+					</h:panelGrid>
+				</p:panel>
+				<p:spacer height="15" />
+				<p:panel id="modificarUsuarioEmpresasPanelId">
+					<h:outputText value="Informaci&#243;n de la Empresas" styleClass="subtitulos" />
+					<p:spacer height="10" />
+					<p:selectManyCheckbox value="#{usuarioDataManager.empresasSelect}" layout="grid" columns="1" converter="empresaConverter" required="true" requiredMessage="#{i18n['menu.item.empresa']} #{i18n['txt.requerido']}">
+						<f:selectItems value="#{usuarioDataManager.empresas}" var="empresa" itemLabel="#{empresa.nombre}" itemValue="#{empresa}" />
+					</p:selectManyCheckbox>
+					<f:facet name="footer">
+						<div align="center">
+							<h:panelGroup styleClass="barraInferior">
+								<p:commandButton
+									id="modificarUsuarioCommandLinkId"
+									action="#{usuarioController.modificarUsuario}"
+									update=":frmAdministrarUsuario:mensajes :frmAdministrarUsuario:admUsuariosPanelGroupId"
+									ajax="true"
+									process="@form"
+									value="Modificar"
+									title="Modificar el Usuario"
+									icon="ui-icon-pencil"
+									styleClass="boton">
+								</p:commandButton>
+								<h:outputText value="&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;" />
+								<p:commandButton
+									id="cancelarModificarCommandLinkId"
+									action="#{usuarioController.cancelarIn}"
+									update=":frmAdministrarUsuario:mensajes :frmAdministrarUsuario:admUsuariosPanelGroupId"
+									ajax="true"
+									process="@this"
+									value="Cancelar"
+									title="Cancelar"
+									icon="ui-icon-cancel"
+									styleClass="boton">
+								</p:commandButton>
+							</h:panelGroup>
+						</div>
+					</f:facet>
+				</p:panel>
+			</h:panelGroup>
+			
+			<h:panelGroup id="nuevoUsuarioPanelGroupId" rendered="#{usuarioDataManager.mostrarNuevoUsuario}">
+				<h:panelGroup styleClass="barraInferior">
+					<p:commandButton
+						id="nuevoUsuarioCommandLinkId"
+						action="#{usuarioController.nuevoUsuario}"
+						update=":frmAdministrarUsuario:mensajes :frmAdministrarUsuario:admUsuariosPanelGroupId"
+						ajax="true"
+						process="@this"
+						value="Nuevo"
+						title="Nuevo Usuario"
+						icon="ui-icon-document"
+						styleClass="boton">
+					</p:commandButton>
+				</h:panelGroup>
+			</h:panelGroup>
+			
+			<h:panelGroup id="mostrarUsuariosPanelGroupId" rendered="#{usuarioDataManager.mostrarUsuarios}">
+				<p:panel>
+					<p:dataTable
+						id="usuariosDataTableId"
+						emptyMessage="No existen Usuarios"
+						paginator="true"
+						paginatorPosition="bottom"
+						paginatorAlwaysVisible="false"
+						value="#{usuarioDataManager.usuarios}"
+						var="usuario"
+						rows="10"
+						rowIndexVar="numRow"
+						styleClass="paginador">
+						
+						<p:column styleClass="colorLabel" style="width: 3%;">
+								<f:facet name="header">
+								<h:outputText styleClass="colorLabel" value="No." />
+							</f:facet>
+							<h:outputText value="#{numRow + 1}" />
+						</p:column>
+
+						<p:column styleClass="columnasCSS" style="width: 25%;">
+							<f:facet name="header">
+								<h:outputText styleClass="colorLabel" value="Nombres / Apellidos" />
+							</f:facet>
+							<p:outputLabel value="#{usuario.nombres} #{usuario.apellidos}" />
+						</p:column>
+						
+						<p:column styleClass="columnasCSS" style="width: 10%;">
+							<f:facet name="header">
+								<h:outputText styleClass="colorLabel" value="C.I./R.U.C." />
+							</f:facet>
+							<p:outputLabel value="#{usuario.cedulaRuc}" />
+						</p:column>
+						
+						<p:column styleClass="columnasCSS" style="width: 38%;">
+							<f:facet name="header">
+								<h:outputText styleClass="colorLabel" value="Email" />
+							</f:facet>
+							<p:outputLabel value="#{usuario.email}" />
+						</p:column>
+						
+						<p:column styleClass="columnasCSS" style="width: 10%;">
+							<f:facet name="header">
+								<h:outputText styleClass="colorLabel" value="Rol" />
+							</f:facet>
+							<p:outputLabel value="#{usuarioController.obtenerNombreRol(usuario.userName)}" />
+						</p:column>
+						
+						<p:column styleClass="columnasCSS" style="width: 10%;">
+							<f:facet name="header">
+								<h:outputText styleClass="colorLabel" value="Estado" />
+							</f:facet>
+							<p:outputLabel value="Activo" rendered="#{usuario.estado == true}" />
+							<p:outputLabel value="Inactivo" rendered="#{usuario.estado == false}" />
+						</p:column>
+						
+						<p:column styleClass="columnasCSS" style="width: 4%;">
+							<div class="contenidoCentro">
+								<p:commandButton
+									id="modificarUsuarioCommandLinkId"
+									action="#{usuarioController.inicioModificarUsuario(usuario)}"
+									update=":frmAdministrarUsuario:mensajes :frmAdministrarUsuario:admUsuariosPanelGroupId"
+									ajax="true"
+									process="@this"
+									title="Modificar el Usuario"
+									icon="ui-icon-pencil"
+									styleClass="boton">
+								</p:commandButton>
+							</div>
+						</p:column>
+					</p:dataTable>
+				</p:panel>
+			</h:panelGroup>
+		</h:panelGroup>
+	</ui:define>
+</ui:composition>

@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<web-app version="3.1"
+	xmlns="http://xmlns.jcp.org/xml/ns/javaee"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation=
+    	"http://xmlns.jcp.org/xml/ns/javaee
+    	http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd">
+
+	<display-name>tt-sgacec-web</display-name>
+    
+    <!-- Manejo mas preciso de errores -->
+    <context-param>
+		<param-name>javax.faces.PROJECT_STAGE</param-name>
+		<param-value>Development</param-value>
+	</context-param>
+	
+	<context-param>
+		<param-name>javax.faces.STATE_SAVING_METHOD</param-name>
+		<param-value>server</param-value>
+	</context-param>
+	
+	<context-param>
+		<param-name>primefaces.THEME</param-name>
+		<param-value>bootstrap</param-value>
+	</context-param>
+	
+	<context-param>
+		<param-name>javax.faces.DEFAULT_SUFFIX</param-name>
+		<param-value>.xhtml</param-value>
+	</context-param>
+	
+	<context-param>
+	   <param-name>primefaces.UPLOADER</param-name>
+	   <param-value>commons</param-value>
+	</context-param>
+	
+	<listener>
+		<listener-class>org.tt.sgacec.web.listener.ContextListener</listener-class>
+	</listener>
+	
+	<!-- Servlet JSF -->
+	<servlet>
+		<servlet-name>Faces Servlet</servlet-name>
+		<servlet-class>javax.faces.webapp.FacesServlet</servlet-class>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+	
+	<servlet>
+		<servlet-name>downloadHelper</servlet-name>
+		<servlet-class>org.tt.sgacec.web.util.DownloadHelper</servlet-class>
+	</servlet>
+	
+	<!-- Map these files with JSF -->
+	<servlet-mapping>
+		<servlet-name>Faces Servlet</servlet-name>
+		<url-pattern>*.jsf</url-pattern>
+	</servlet-mapping>
+	
+	<filter>
+		<filter-name>PrimeFaces FileUpload Filter</filter-name>
+		<filter-class>org.primefaces.webapp.filter.FileUploadFilter</filter-class>
+		<init-param>
+			<param-name>thresholdSize</param-name>
+			<param-value>51200</param-value>
+		</init-param>
+	</filter>
+
+	<filter-mapping>
+		<filter-name>PrimeFaces FileUpload Filter</filter-name>
+		<servlet-name>Faces Servlet</servlet-name>
+	</filter-mapping>
+	
+	<servlet-mapping>
+		<servlet-name>downloadHelper</servlet-name>
+		<url-pattern>/downloadHelper.jsf</url-pattern>
+	</servlet-mapping>
+	
+	<!-- Timeout session -->
+	<session-config>
+		<session-timeout>30</session-timeout>
+	</session-config>
+
+	<!-- Welcome page -->
+	<welcome-file-list>
+		<welcome-file>/index.jsp</welcome-file>
+	</welcome-file-list>
+
+	<error-page>
+		<error-code>403</error-code>
+		<location>/no-autorizado.jsp</location>
+	</error-page>
+	
+	<security-constraint>
+		<web-resource-collection>
+			<web-resource-name>Recursos no Protegidos</web-resource-name>
+			<url-pattern>/resources/*</url-pattern>
+			<url-pattern>/javax.faces.resource/*</url-pattern>
+			<url-pattern>/pages/inicio/olvidoClave.jsf</url-pattern>
+			<url-pattern>/registrarse.jsp</url-pattern>
+			<url-pattern>/olvidoClave.jsp</url-pattern>
+			<url-pattern>/logout.jsp</url-pattern>
+			<http-method>GET</http-method>
+			<http-method>POST</http-method>
+		</web-resource-collection>
+	</security-constraint>
+	
+	<security-constraint>
+		<display-name>User Authentication Policy</display-name>
+		<web-resource-collection>
+			<web-resource-name>User Authentication Policy</web-resource-name>
+			<description>User Authentication Policy</description>
+			<url-pattern>/*</url-pattern>
+		</web-resource-collection>
+		<auth-constraint>
+			<description>Rol Todo</description>
+			<role-name>*</role-name>
+		</auth-constraint>
+	</security-constraint>
+	
+	<security-constraint>
+		<display-name>Area Admistrativa</display-name>
+		<web-resource-collection>
+			<web-resource-name>Area Admistrativa</web-resource-name>
+			<description>Recursos Admistrativos</description>
+			<url-pattern>/pages/adm/administrarParametrosSistema.jsf</url-pattern>
+			<url-pattern>/pages/adm/administrarPreguntasSeguridad.jsf</url-pattern>
+			<url-pattern>/pages/adm/administrarUsuario.jsf</url-pattern>
+			<url-pattern>/pages/adm/admEmpresa.jsf</url-pattern>
+		</web-resource-collection>
+		<auth-constraint>
+			<description>Rol Administracion</description>
+			<role-name>ADMIN</role-name>
+		</auth-constraint>
+	</security-constraint>
+	
+	<security-constraint>
+		<display-name>Area Operador</display-name>
+		<web-resource-collection>
+			<web-resource-name>Area Operador</web-resource-name>
+			<description>Recursos Operador</description>
+			<url-pattern>/pages/gestion/consultaComprobantes.jsf</url-pattern>
+		</web-resource-collection>
+		<auth-constraint>
+			<description>Rol Operador</description>
+			<role-name>OPERADOR</role-name>
+		</auth-constraint>
+	</security-constraint>
+	
+	<security-role>
+		<description>Rol Administrador</description>
+		<role-name>ADMIN</role-name>
+	</security-role>
+	
+	<security-role>
+		<description>Rol Operador</description>
+		<role-name>OPERADOR</role-name>
+	</security-role>
+	
+	<login-config>
+		<auth-method>FORM</auth-method>
+		<form-login-config>
+			<form-login-page>/login.jsp</form-login-page>
+			<form-error-page>/login-error.jsp</form-error-page>
+		</form-login-config>
+	</login-config>
+</web-app>

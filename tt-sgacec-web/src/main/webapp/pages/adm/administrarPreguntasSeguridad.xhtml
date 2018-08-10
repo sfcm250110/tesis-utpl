@@ -1,0 +1,202 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:s="http://java.sun.com/jsf/composite/components"
+	template="/templates/ui.xhtml">
+	
+	<ui:param name="idForm" 	            value="frmAdministrarPreguntasSeguridad" />
+	<ui:param name="form"               	value="#{administrarPreguntaSeguridadControlador.form}" />
+	<ui:param name="controlador"        	value="#{administrarPreguntaSeguridadControlador}" />
+	<ui:param name="tituloMenuActual"       value="Administrar Preguntas Seguridad" />
+	<ui:param name="tituloOpcionUsuario"   	value="Administraci&#243;n Preguntas de Seguridad" />
+	<ui:param name="tituloPaginaActual" 	value="ADMINISTRAR PREGUNTAS DE SEGURIDAD" />
+	
+	<ui:define name="contentBody">
+		<h:panelGroup id="admPreguntasSeguridadPanelGroupId">
+			<h:panelGroup id="crearPreguntasSeguridadPanelGroupId" rendered="#{administrarPreguntaSeguridadDataManager.mostrarCrearPreguntaSeguridad}">
+				<p:panel id="crearPreguntasSeguridadPanelId">
+					<h:outputText value="Informaci&#243;n de la Pregunta de Seguridad" styleClass="subtitulos" />
+					<h:panelGrid id="informacionCrearPreguntaSeguridadPanelGridId" columns="2" cellpadding="0" cellspacing="0" border="0" columnClasses="labelFormulario, contentFormulario">
+						<p:outputLabel id="nombreCrearOutputTextId" for="nombreCrearInputTextId" value="Pregunta Seguridad: " />
+						<p:inputText id="nombreCrearInputTextId" value="#{administrarPreguntaSeguridadDataManager.crearPreguntaSeguridad.preguntaSeguridad}" required="true" requiredMessage="Pregunta Seguridad es requerido." />
+					</h:panelGrid>
+					<f:facet name="footer">
+						<div align="center">
+							<h:panelGroup styleClass="barraInferior">
+								<p:commandButton
+									id="crearPreguntaSeguridadCommandLinkId"
+									action="#{administrarPreguntaSeguridadControlador.crearPreguntaSeguridad}"
+									update=":frmAdministrarPreguntasSeguridad:mensajes :frmAdministrarPreguntasSeguridad:admPreguntasSeguridadPanelGroupId"
+									ajax="true"
+									process="@form"
+									value="Crear"
+									title="Crear la Pregunta de Seguridad"
+									icon="ui-icon-disk"
+									styleClass="boton">
+								</p:commandButton>
+								<h:outputText value="&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;" />
+								<p:commandButton
+									id="cancelarCrearCommandLinkId"
+									action="#{administrarPreguntaSeguridadControlador.cancelarIn}"
+									update=":frmAdministrarPreguntasSeguridad:mensajes :frmAdministrarPreguntasSeguridad:admPreguntasSeguridadPanelGroupId"
+									ajax="true"
+									process="@this"
+									value="Cancelar"
+									title="Cancelar"
+									icon="ui-icon-cancel"
+									styleClass="boton">
+								</p:commandButton>
+							</h:panelGroup>
+						</div>
+					</f:facet>
+				</p:panel>
+			</h:panelGroup>
+			
+			<h:panelGroup id="modificarPreguntasSeguridadPanelGroupId" rendered="#{administrarPreguntaSeguridadDataManager.mostrarModificarPreguntaSeguridad}">
+				<p:panel id="modificarPreguntasSeguridadPanelId">
+					<h:outputText value="Informaci&#243;n de la Pregunta de Seguridad" styleClass="subtitulos" />
+					<h:panelGrid id="informacionPreguntaSeguridadModificarPanelGridId" columns="2" cellpadding="0" cellspacing="0" border="0" columnClasses="labelFormulario, contentFormulario">
+						<p:outputLabel id="nombreModificarOutputTextId" for="nombreModificarInputTextId" value="Pregunta Seguridad: " />
+						<p:inputText id="nombreModificarInputTextId" value="#{administrarPreguntaSeguridadDataManager.modificarPreguntaSeguridad.preguntaSeguridad}" required="true" requiredMessage="Pregunta Seguridad es requerido." />
+					</h:panelGrid>
+					<f:facet name="footer">
+						<div align="center">
+							<h:panelGroup styleClass="barraInferior">
+								<p:commandButton
+									id="modificarPreguntaSeguridadCommandLinkId"
+									action="#{administrarPreguntaSeguridadControlador.modificarPreguntaSeguridad}"
+									update=":frmAdministrarPreguntasSeguridad:mensajes :frmAdministrarPreguntasSeguridad:admPreguntasSeguridadPanelGroupId"
+									ajax="true"
+									process="@form"
+									value="Modificar"
+									title="Modificar la Pregunta de Seguridad"
+									icon="ui-icon-pencil"
+									styleClass="boton">
+								</p:commandButton>
+								<h:outputText value="&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;" />
+								<p:commandButton
+									id="cancelarModificarCommandLinkId"
+									action="#{administrarPreguntaSeguridadControlador.cancelarIn}"
+									update=":frmAdministrarPreguntasSeguridad:mensajes :frmAdministrarPreguntasSeguridad:admPreguntasSeguridadPanelGroupId"
+									ajax="true"
+									process="@this"
+									value="Cancelar"
+									title="Cancelar"
+									icon="ui-icon-cancel"
+									styleClass="boton">
+								</p:commandButton>
+							</h:panelGroup>
+						</div>
+					</f:facet>
+				</p:panel>
+			</h:panelGroup>
+			
+			<h:panelGroup id="nuevaPreguntaSeguridadPanelGroupId" rendered="#{administrarPreguntaSeguridadDataManager.mostrarNuevaPreguntaSeguridad}">
+				<h:panelGroup styleClass="barraInferior">
+					<p:commandButton
+						id="nuevaPreguntaSeguridadCommandLinkId"
+						action="#{administrarPreguntaSeguridadControlador.nuevaPreguntaSeguridad}"
+						update=":frmAdministrarPreguntasSeguridad:mensajes :frmAdministrarPreguntasSeguridad:admPreguntasSeguridadPanelGroupId"
+						ajax="true"
+						process="@this"
+						value="Nueva"
+						title="Nueva Pregunta de Seguridad"
+						icon="ui-icon-document"
+						styleClass="boton">
+					</p:commandButton>
+				</h:panelGroup>
+			</h:panelGroup>
+			
+			<p:spacer height="35" />
+			
+			<h:panelGroup>
+				<p:panel>
+					<p:dataTable
+						id="preguntasSeguridadDataTableId"
+						emptyMessage="No existen Preguntas de Seguridad"
+						paginator="true"
+						paginatorPosition="bottom"
+						paginatorAlwaysVisible="false"
+						value="#{administrarPreguntaSeguridadDataManager.preguntasSeguridad}"
+						var="preguntaSeguridad"
+						rows="10"
+						rowIndexVar="numRow"
+						styleClass="paginador">
+						
+						<p:column styleClass="colorLabel" style="width: 3%;">
+							<f:facet name="header">
+								<h:outputText styleClass="colorLabel" value="No." />
+							</f:facet>
+							<h:outputText value="#{numRow + 1}" />
+						</p:column>
+
+						<p:column id="nombreColumnId" styleClass="columnasCSS" style="width: 89%;">
+							<f:facet name="header">
+								<h:outputText styleClass="colorLabel" value="Pregunta Seguridad" />
+							</f:facet>
+							<p:outputLabel value="#{preguntaSeguridad.preguntaSeguridad}" />
+						</p:column>
+						
+						<p:column id="modificarColumnId" styleClass="columnasCSS" style="width: 4%;">
+							<div class="contenidoCentro">
+								<p:commandButton
+									id="modificarPreguntaSeguridadCommandLinkId"
+									action="#{administrarPreguntaSeguridadControlador.inicioModificarPreguntaSeguridad(preguntaSeguridad)}"
+									update=":frmAdministrarPreguntasSeguridad:mensajes :frmAdministrarPreguntasSeguridad:admPreguntasSeguridadPanelGroupId"
+									ajax="true"
+									process="@this"
+									title="Modificar la Pregunta de Seguridad"
+									icon="ui-icon-pencil"
+									styleClass="boton">
+								</p:commandButton>
+							</div>
+						</p:column>
+						
+						<p:column id="eliminarPreguntaSeguridadColumnId" styleClass="columnasCSS" style="width: 4%;">
+							<div class="contenidoCentro">
+								<p:commandButton
+									id="eliminarPreguntaSeguridadCommandLinkId"
+									action="#{administrarPreguntaSeguridadControlador.inicioEliminarPreguntaSeguridad(preguntaSeguridad)}"
+									update=":frmAdministrarPreguntasSeguridad:mensajes :frmAdministrarPreguntasSeguridad:admPreguntasSeguridadPanelGroupId :frmAdministrarPreguntasSeguridad:eliminarPreguntaSeguridadConfirmDialogId"
+									ajax="true"
+									process="@this"
+									title="Eliminar la Pregunta de Seguridad"
+									icon="ui-icon-trash"
+									oncomplete="PF('eliminarPreguntaSeguridadWidgetVar').show()"
+									styleClass="boton">
+								</p:commandButton>
+							</div>
+						</p:column>
+					</p:dataTable>
+				</p:panel>
+				
+				<p:confirmDialog
+					id="eliminarPreguntaSeguridadConfirmDialogId"
+					message="PreguntaSeguridad desea eliminar la pregunta de seguridad: #{administrarPreguntaSeguridadDataManager.eliminarPreguntaSeguridad.preguntaSeguridad}"
+					widgetVar="eliminarPreguntaSeguridadWidgetVar"
+					header="#{msg['etiqueta.comun.eliminar.titulo']}"
+					severity="alert"
+					showEffect="#{msg['etiqueta.comun.dialog.efecto']}"
+					hideEffect="#{msg['etiqueta.comun.dialog.efecto']}">
+					<p:commandButton
+						value="Si"
+						styleClass="ui-confirmdialog-yes"
+						icon="ui-icon-check"
+						action="#{administrarPreguntaSeguridadControlador.eliminarPreguntaSeguridad()}"
+						process="@this"
+						oncomplete="PF('eliminarPreguntaSeguridadWidgetVar').hide()"
+						update=":frmAdministrarPreguntasSeguridad:preguntasSeguridadDataTableId :frmAdministrarPreguntasSeguridad:mensajes">
+					</p:commandButton>
+					<p:commandButton
+						value="No"
+						onclick="eliminarPreguntaSeguridadWidgetVar.hide()"
+						styleClass="ui-confirmdialog-no"
+						icon="ui-icon-close">
+					</p:commandButton>
+				</p:confirmDialog>
+			</h:panelGroup>
+		</h:panelGroup>
+	</ui:define>
+</ui:composition>

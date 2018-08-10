@@ -1,0 +1,203 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:s="http://java.sun.com/jsf/composite/components"
+	template="/templates/ui.xhtml">
+	
+	<ui:param name="idForm" 	            value="frmConsultarComprobantes" 				 />
+	<ui:param name="form"               	value="#{consultaComprobantesControlador.form}" />
+	<ui:param name="controlador"        	value="#{consultaComprobantesControlador}"		 />
+	<ui:param name="tituloMenuActual"       value="Consultar Comprobantes"					 />
+	<ui:param name="tituloOpcionUsuario"   	value="Consultar Comprobantes" 		 			 />
+	<ui:param name="tituloPaginaActual" 	value="CONSULTAR COMPROBANTES" 		 			 />
+	
+	<ui:define name="contentBody">
+		<h:panelGroup id="generalPanelGroupId">
+			<h:panelGroup id="busquedaPanelGroupId">
+				<p:panel id="busquedaPanelId">
+					<h:outputText value="Criterios de B&#250;squeda" styleClass="subtitulos" />
+					<h:panelGrid columns="2" cellpadding="0" cellspacing="0" border="0" columnClasses="labelFormulario, contentFormulario">
+						<p:outputLabel value="#{i18n['lbl.ruc.emisor']}: " />
+						<p:inputText value="#{consultaComprobantesDataManager.comprobanteEmpresa.rucEmisor}" />
+						
+						<p:outputLabel value="#{i18n['lbl.razon.social.emisor']}:" />
+						<p:inputText value="#{consultaComprobantesDataManager.comprobanteEmpresa.razonSocialEmisor}" />
+						
+						<p:outputLabel value="#{i18n['lbl.secuencial']}:" />
+						<p:inputText value="#{consultaComprobantesDataManager.comprobanteEmpresa.secuencial}" />
+						
+						<p:outputLabel value="#{i18n['lbl.fecha.emision.desde']}: " />
+						<p:calendar value="#{consultaComprobantesDataManager.fechaEmisionDesde}" showOn="button" pattern="yyyy-MM-dd" required="true" requiredMessage="#{i18n['lbl.fecha.emision.desde']} #{i18n['txt.requerido']}" />
+						
+						<p:outputLabel value="#{i18n['lbl.fecha.emision.hasta']}: " />
+						<p:calendar value="#{consultaComprobantesDataManager.fechaEmisionHasta}" showOn="button" pattern="yyyy-MM-dd" required="true" requiredMessage="#{i18n['lbl.fecha.emision.hasta']} #{i18n['txt.requerido']}" />
+					</h:panelGrid>
+					<f:facet name="footer">
+						<div align="center">
+							<h:panelGroup styleClass="barraInferior">
+								<p:commandButton
+									id="consultarCommandLinkId"
+									action="#{consultaComprobantesControlador.consultar}"
+									update=":frmConsultarComprobantes:mensajes :frmConsultarComprobantes:generalPanelGroupId"
+									ajax="true"
+									process="@form"
+									value="#{i18n['lbl.consultar']}"
+									title="#{i18n['lbl.consultar']}"
+									icon="ui-icon-search"
+									styleClass="boton">
+								</p:commandButton>
+								<h:outputText value="&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;" />
+								<p:commandButton
+									id="cancelarCmdLinkId"
+									action="#{consultaComprobantesControlador.cancelar}"
+									update=":frmConsultarComprobantes:mensajes :frmConsultarComprobantes:generalPanelGroupId"
+									ajax="true"
+									process="@this"
+									value="#{i18n['lbl.cancelar']}"
+									title="#{i18n['lbl.cancelar']}"
+									icon="ui-icon-search"
+									styleClass="boton">
+								</p:commandButton>
+							</h:panelGroup>
+						</div>
+					</f:facet>
+				</p:panel>
+			</h:panelGroup>
+			
+			<p:spacer height="35" />
+			
+			<h:panelGroup>
+				<p:panel>
+					<p:dataTable
+						id="comprobantesEmpresaDataTblId"
+						emptyMessage="#{i18n['msg.no.registros.mostrar']}"
+						paginator="true"
+						paginatorPosition="bottom"
+						paginatorAlwaysVisible="false"
+						value="#{consultaComprobantesDataManager.comprobantesEmpresa}"
+						var="comprobanteEmpresa"
+						rows="#{consultaComprobantesDataManager.maxRowsTabla}"
+						rowIndexVar="numRow"
+						styleClass="paginador">
+						
+						<p:column styleClass="colorLabel" style="width: 3%;">
+							<f:facet name="header">
+								<h:outputText styleClass="colorLabel" value="No." />
+							</f:facet>
+							<h:outputText value="#{numRow + 1}" />
+						</p:column>
+
+						<p:column styleClass="columnasCSS" style="width: 9%;">
+							<f:facet name="header">
+								<h:outputText styleClass="colorLabel" value="#{i18n['lbl.ruc.emisor']}" />
+							</f:facet>
+							<p:outputLabel id="rucEmisorOoutputLabelId" value="#{comprobanteEmpresa.rucEmisor}" />
+							<p:overlayPanel
+								id="infoOverlayPanelId"
+								for="rucEmisorOoutputLabelId"
+								showEvent="mouseover"
+								hideEvent="mouseout"
+								dismissable="false"
+								showCloseIcon="true"
+								dinamyc="true">
+								<h:panelGrid columns="2" cellpadding="0" cellspacing="0" border="0" columnClasses="labelFormulario">
+									<p:outputLabel value="#{i18n['lbl.numero.autorizacion']}:" />
+									<p:outputLabel value="#{comprobanteEmpresa.numeroAutorizacion}" />
+									
+									<p:outputLabel value="#{i18n['lbl.clave.acceso']}:" />
+									<p:outputLabel value="#{comprobanteEmpresa.claveAcceso}" />
+									
+									<p:outputLabel value="#{i18n['lbl.tipo.emision']}:" />
+									<h:panelGroup>
+										<p:outputLabel value="Normal" rendered="#{comprobanteEmpresa.tipoEmision == 1}" />
+										<p:outputLabel value="Indisponibilidad del Sistema" rendered="#{comprobanteEmpresa.tipoEmision == 2}" />
+									</h:panelGroup>
+								</h:panelGrid>
+							</p:overlayPanel>
+						</p:column>
+						
+						<p:column styleClass="columnasCSS" style="width: 27%;">
+							<f:facet name="header">
+								<h:outputText styleClass="colorLabel" value="#{i18n['lbl.razon.social.emisor']}" />
+							</f:facet>
+							<p:outputLabel value="#{comprobanteEmpresa.razonSocialEmisor}" />
+						</p:column>
+						
+						<p:column styleClass="columnasCSS" style="width: 14%;">
+							<f:facet name="header">
+								<h:outputText styleClass="colorLabel" value="#{i18n['lbl.tipo']}" />
+							</f:facet>
+							<p:outputLabel value="#{comprobanteEmpresa.tipoLbl}" />
+						</p:column>
+						
+						<p:column styleClass="columnasCSS" style="width: 9%;">
+							<f:facet name="header">
+								<h:outputText styleClass="colorLabel" value="#{i18n['lbl.fecha.emision']}" />
+							</f:facet>
+							<p:outputLabel value="#{comprobanteEmpresa.fechaEmision}" />
+						</p:column>
+						
+						<p:column styleClass="columnasCSS" style="width: 11%;">
+							<f:facet name="header">
+								<h:outputText styleClass="colorLabel" value="#{i18n['lbl.fecha.autorizacion']}" />
+							</f:facet>
+							<p:outputLabel value="#{comprobanteEmpresa.fechaAutorizacion}">
+								<f:convertDateTime pattern="yyyy-MM-dd HH:mm:ss" timeZone="GMT-5" />
+							</p:outputLabel>
+						</p:column>
+						
+						<p:column styleClass="columnasCSS" style="width: 12%;">
+							<f:facet name="header">
+								<h:outputText styleClass="colorLabel" value="#{i18n['lbl.numero.comprobante']}" />
+							</f:facet>
+							<p:outputLabel value="#{comprobanteEmpresa.establecimiento}-#{comprobanteEmpresa.puntoEmision}-#{comprobanteEmpresa.secuencial}" />
+						</p:column>
+						
+						<p:column styleClass="columnasCSS" style="width: 7%;">
+							<f:facet name="header">
+								<h:outputText styleClass="colorLabel" value="#{i18n['lbl.estado']}" />
+							</f:facet>
+							<p:outputLabel value="#{comprobanteEmpresa.estadoLbl}" />
+						</p:column>
+						
+						<p:column styleClass="columnasCSS" style="width: 4%;">
+							<f:facet name="header">
+								<h:outputText styleClass="colorLabel" value="#{i18n['lbl.xml']}" />
+							</f:facet>
+							<div class="contenidoCentro">
+								<p:commandButton
+									action="#{consultaComprobantesControlador.downloadXml(comprobanteEmpresa)}"
+									update=":frmConsultarComprobantes:mensajes :frmConsultarComprobantes:generalPanelGroupId"
+									ajax="true"
+									process="@this"
+									title="#{i18n['lbl.descargar']}"
+									icon="ui-icon-arrowthick-1-s"
+									styleClass="boton">
+								</p:commandButton>
+							</div>
+						</p:column>
+						
+						<p:column styleClass="columnasCSS" style="width: 4%;">
+							<f:facet name="header">
+								<h:outputText styleClass="colorLabel" value="#{i18n['lbl.pdf']}" />
+							</f:facet>
+							<div class="contenidoCentro">
+								<p:commandButton
+									action="#{consultaComprobantesControlador.downloadPdf(comprobanteEmpresa)}"
+									update=":frmConsultarComprobantes:mensajes :frmConsultarComprobantes:generalPanelGroupId"
+									ajax="true"
+									process="@this"
+									title="#{i18n['lbl.descargar']}"
+									icon="ui-icon-arrowthick-1-s"
+									styleClass="boton">
+								</p:commandButton>
+							</div>
+						</p:column>
+					</p:dataTable>
+				</p:panel>
+			</h:panelGroup>
+		</h:panelGroup>
+	</ui:define>
+</ui:composition>

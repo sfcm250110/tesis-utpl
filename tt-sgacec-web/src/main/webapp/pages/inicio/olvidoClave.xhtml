@@ -1,0 +1,135 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:s="http://java.sun.com/jsf/composite/components"
+	template="/templates/uiSessionOut.xhtml">
+	
+	<ui:param name="idForm" 	            value="frmOlvidoClave" />
+	<ui:param name="form"               	value="#{olvidoClaveControlador.form}" />
+	<ui:param name="controlador"        	value="#{olvidoClaveControlador}" />
+	<ui:param name="tituloMenuActual"       value="Recuperar Clave" />
+	<ui:param name="tituloPaginaActual" 	value="RECUPERAR CLAVE" />
+	
+	<ui:define name="contentBody">
+		<h1>
+			<h:panelGroup id="tituloOpcionUsuarioPanelGroupId">
+				<h:outputText value="#{olvidoClaveDataManager.tituloOpcionUsuario}" styleClass="titulosPrincipales" />
+			</h:panelGroup>
+		</h1>
+	
+		<h:panelGroup id="recuperarClavePanelGroupId">
+			<h:panelGroup id="recuperarClavePanelGroupInId" rendered="#{olvidoClaveDataManager.informacionEmail}">
+				<p:panel id="recuperarClavePanelId">
+					<h:panelGrid id="recuperarClavePanelGridId" columns="2" cellpadding="0" cellspacing="0" border="0" columnClasses="labelFormulario, contentFormulario, labelFormulario, contentFormulario">
+						<p:outputLabel for="correoId" value="Email:" />
+						<p:inputText id="correoId" value="#{olvidoClaveDataManager.email}" required="true" requiredMessage="Email es requerido." validatorMessage="Email inv&#225;lido">
+							<f:validateRegex pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$" />
+						</p:inputText>
+					</h:panelGrid>
+					<f:facet name="footer">
+						<div align="center">
+							<h:panelGroup styleClass="barraInferior">
+								<p:commandButton
+									id="cancelarCommandLinkId"
+									action="/pages/inicio/inicio?faces-redirect=true"
+									ajax="true"
+									process="@this"
+									inmediate="true"
+									value="Cancelar"
+									title="Cancelar Olvido Clave"
+									icon="ui-icon-cancel"
+									styleClass="boton">
+								</p:commandButton>
+								<h:outputText value="&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;" />
+								<p:commandButton
+									id="verificarEmailCommandLinkId"
+									action="#{olvidoClaveControlador.verificarEmail}"
+									update=":frmOlvidoClave:mensajes :frmOlvidoClave:recuperarClavePanelGroupId :frmOlvidoClave:tituloOpcionUsuarioPanelGroupId"
+									ajax="true"
+									process="@form"
+									value="Verificar"
+									title="Verificar la Clave"
+									icon="ui-icon-arrow-1-e"
+									styleClass="boton">
+								</p:commandButton>
+							</h:panelGroup>
+						</div>
+					</f:facet>
+				</p:panel>
+			</h:panelGroup>
+			
+			<h:panelGroup id="preguntaSeguridadPanelGroupInId" rendered="#{olvidoClaveDataManager.informacionPreguntaSeguridad}">
+				<p:panel id="preguntaSeguridadPanelId">
+					<h:panelGrid id="preguntaSeguridadPanelGridId" columns="2" cellpadding="0" cellspacing="0" border="0" columnClasses="labelFormulario, contentFormulario, labelFormulario, contentFormulario">
+						<p:outputLabel for="preguntaSeguridadUnoOneMenuId" value="Pregunta Seguridad:" />
+						<p:selectOneMenu id="preguntaSeguridadUnoOneMenuId" value="#{olvidoClaveDataManager.idPreguntaSeguridad}" required="true" requiredMessage="Pregunta Seguridad es requerido." styleClass="withSelectOneMenu">
+							<f:selectItem itemLabel="Seleccione ..." itemValue="" />
+							<f:selectItems value="#{olvidoClaveDataManager.preguntasSeguridadSelectItem}" />
+						</p:selectOneMenu>
+						
+						<p:outputLabel for="respuestaSeguridadUnoOutputLabelId" value="Respuesta Seguridad:" />
+						<p:inputText id="respuestaSeguridadUnoOutputLabelId" value="#{olvidoClaveDataManager.respuestaSeguridad}" required="true" requiredMessage="Respuesta Pregunta Seguridad es requerido." />
+					</h:panelGrid>
+					<f:facet name="footer">
+						<div align="center">
+							<h:panelGroup styleClass="barraInferior">
+								<p:commandButton
+									id="atrasCommandLinkId"
+									action="#{olvidoClaveControlador.atrasVerificarEmail}"
+									update=":frmOlvidoClave:mensajes :frmOlvidoClave:recuperarClavePanelGroupId :frmOlvidoClave:tituloOpcionUsuarioPanelGroupId"
+									ajax="true"
+									process="@this"
+									value="Regresar"
+									title="Regresar a Verificar Email del Cliente"
+									icon="ui-icon-arrow-1-w"
+									styleClass="boton">
+								</p:commandButton>
+								<h:outputText value="&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;" />
+								<p:commandButton
+									id="recuperarCommandLinkId"
+									action="#{olvidoClaveControlador.verificarPreguntaSeguridad}"
+									update=":frmOlvidoClave:mensajes :frmOlvidoClave:recuperarClavePanelGroupId :frmOlvidoClave:tituloOpcionUsuarioPanelGroupId"
+									ajax="true"
+									process="@form"
+									value="Verificar"
+									title="Verificar la Pregunta Seguridad"
+									icon="ui-icon-arrow-1-e"
+									styleClass="boton">
+								</p:commandButton>
+							</h:panelGroup>
+						</div>
+					</f:facet>
+				</p:panel>
+			</h:panelGroup>
+			
+			<h:panelGroup id="informacionExitosaPanelGroupInId" rendered="#{olvidoClaveDataManager.informacionExitosa}">
+				<p:panel id="informacionExitosaPanelId">
+					<h:panelGrid id="informacionExitosaPanelGridId" columns="1" cellpadding="0" cellspacing="0" border="0" columnClasses="contentFormularioUnitario">
+						<h:outputText value="#{olvidoClaveDataManager.usuario.nombres} #{olvidoClaveDataManager.usuario.apellidos} se ha recuperado exitosamente la clave." />
+						<h:outputText value="Se ha enviado la nueva clave a su email." />
+						<h:outputText value="Ahora puede ingresar al sistema !!!" />
+					</h:panelGrid>
+					<f:facet name="footer">
+						<div align="center">
+							<h:panelGroup styleClass="barraInferior">
+								<p:commandButton
+									id="ingresarCommandButtonId"
+									action="/pages/inicio/inicio?faces-redirect=true"
+									ajax="false"
+									process="@this"
+									inmediate="true"
+									value="Ingresar"
+									title="Igresar al Sistema"
+									icon="ui-icon-locked"
+									styleClass="boton">
+								</p:commandButton>
+							</h:panelGroup>
+						</div>
+					</f:facet>
+				</p:panel>
+			</h:panelGroup>
+		</h:panelGroup>
+	</ui:define>
+</ui:composition>

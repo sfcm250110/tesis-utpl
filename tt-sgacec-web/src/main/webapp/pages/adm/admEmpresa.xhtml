@@ -1,0 +1,222 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:s="http://java.sun.com/jsf/composite/components"
+	template="/templates/ui.xhtml">
+	
+	<ui:param name="idForm" 	            value="frmAdmEmpresa" 				 />
+	<ui:param name="form"               	value="#{admEmpresaController.form}" />
+	<ui:param name="controlador"        	value="#{admEmpresaController}" 	 />
+	<ui:param name="tituloMenuActual"       value="Administrar Empresa" 		 />
+	<ui:param name="tituloOpcionUsuario"   	value="Administraci&#243;n Empresa"  />
+	<ui:param name="tituloPaginaActual" 	value="ADMINISTRAR EMPRESA"   		 />
+	
+	<ui:define name="contentBody">
+		<h:panelGroup id="admEmpresaPanelGroupId">
+		
+			<h:panelGroup id="crearEmpresaPanelGroupId" rendered="#{admEmpresaDataManager.mostrarCrearEmpresa}">
+				<p:panel id="crearEmpresaPanelId">
+					<h:outputText value="Informaci&#243;n de la Empresa" styleClass="subtitulos" />
+					<h:panelGrid id="informacionCrearEmpresaPanelGridId" columns="4" cellpadding="0" cellspacing="0" border="0" columnClasses="labelFormulario, contentFormulario, labelFormulario, contentFormulario">
+						<p:outputLabel value="#{i18n['lbl.empresa']}:" />
+						<p:inputText value="#{admEmpresaDataManager.crearEmpresa.nombre}" required="true" requiredMessage="#{i18n['lbl.empresa']} #{i18n['txt.requerido']}" onkeypress="return letras(event)" />
+						
+						<p:outputLabel value="#{i18n['lbl.ruc']}: " />
+						<p:inputText maxlength="20" value="#{admEmpresaDataManager.crearEmpresa.ruc}" required="true" requiredMessage="#{i18n['lbl.ruc']} #{i18n['txt.requerido']}" />
+						
+						<p:outputLabel value="#{i18n['lbl.clave.sri']}:" />
+						<p:inputText value="#{admEmpresaDataManager.crearEmpresa.claveSri}" required="true" requiredMessage="#{i18n['lbl.clave.sri']} #{i18n['txt.requerido']}" />						
+						<p:outputLabel value="#{i18n['lbl.descarga.inicio']}:" />
+						<p:calendar value="#{admEmpresaDataManager.crearEmpresa.fechaInitDownload}" showOn="button" pattern="yyyy-MM-dd" required="true" requiredMessage="#{i18n['lbl.descarga.inicio']} #{i18n['txt.requerido']}" />
+					</h:panelGrid>
+					<f:facet name="footer">
+						<div align="center">
+							<h:panelGroup styleClass="barraInferior">
+								<p:commandButton
+									id="crearEmpresaCommandLinkId"
+									action="#{admEmpresaController.crearEmpresa}"
+									update=":frmAdmEmpresa:mensajes :frmAdmEmpresa:admEmpresaPanelGroupId"
+									ajax="true"
+									process="@form"
+									value="#{i18n['lbl.crear']}"
+									title="Crear la Empresa"
+									icon="ui-icon-disk"
+									styleClass="boton">
+								</p:commandButton>
+								<h:outputText value="&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;" />
+								<p:commandButton
+									id="cancelarCrearCommandLinkId"
+									action="#{admEmpresaController.cancelarIn}"
+									update=":frmAdmEmpresa:mensajes :frmAdmEmpresa:admEmpresaPanelGroupId"
+									ajax="true"
+									process="@this"
+									value="#{i18n['lbl.cancelar']}"
+									title="Cancelar"
+									icon="ui-icon-cancel"
+									styleClass="boton">
+								</p:commandButton>
+							</h:panelGroup>
+						</div>
+					</f:facet>
+				</p:panel>
+			</h:panelGroup>
+			
+			<h:panelGroup id="modificarEmpresaPanelGroupId" rendered="#{admEmpresaDataManager.mostrarModificarEmpresa}">
+				<p:panel id="modificarEmpresaPanelId">
+					<h:outputText value="Informaci&#243;n de la Empresa" styleClass="subtitulos" />
+					<h:panelGrid id="informacionEmpresaModificarPanelGridId" columns="4" cellpadding="0" cellspacing="0" border="0" columnClasses="labelFormulario, contentFormulario, labelFormulario, contentFormulario">
+						<p:outputLabel value="#{i18n['lbl.empresa']}:" />
+						<p:inputText value="#{admEmpresaDataManager.modificarEmpresa.nombre}" required="true" requiredMessage="#{i18n['lbl.empresa']} #{i18n['txt.requerido']}" onkeypress="return letras(event)" />
+						
+						<p:outputLabel value="#{i18n['lbl.ruc']}: " />
+						<p:inputText maxlength="20" value="#{admEmpresaDataManager.modificarEmpresa.ruc}" required="true" requiredMessage="#{i18n['lbl.ruc']} #{i18n['txt.requerido']}" />
+						
+						<p:outputLabel value="#{i18n['lbl.clave.sri']}:" />
+						<p:inputText value="#{admEmpresaDataManager.modificarEmpresa.claveSri}" required="true" requiredMessage="#{i18n['lbl.clave.sri']} #{i18n['txt.requerido']}" />
+						<p:outputLabel value="#{i18n['lbl.descarga.inicio']}:" />
+						<p:calendar value="#{admEmpresaDataManager.modificarEmpresa.fechaInitDownload}" showOn="button" pattern="yyyy-MM-dd" required="true" requiredMessage="#{i18n['lbl.descarga.inicio']} #{i18n['txt.requerido']}" />
+						
+						<p:outputLabel value="#{i18n['lbl.estado']}:" />
+						<p:selectOneMenu
+							value="#{admEmpresaDataManager.modificarEmpresa.estado}"
+							required="true"
+							styleClass="withSelectOneMenu"
+							requiredMessage="#{i18n['lbl.estado']} #{i18n['txt.requerido']}">
+							<f:selectItem itemLabel="Seleccione..." />
+							<f:selectItems
+								value="#{admEmpresaDataManager.estados}"
+								var="estado"
+								itemLabel="#{estado.name}"
+								itemValue="#{estado.value}">
+							</f:selectItems>
+						</p:selectOneMenu>
+						<p:outputLabel value="#{i18n['lbl.descarga.actual']}" />
+						<p:calendar value="#{admEmpresaDataManager.modificarEmpresa.fechaDownload}" showOn="button" pattern="yyyy-MM-dd" required="true" requiredMessage="#{i18n['lbl.descarga.actual']} #{i18n['txt.requerido']}" />
+					</h:panelGrid>
+					<f:facet name="footer">
+						<div align="center">
+							<h:panelGroup styleClass="barraInferior">
+								<p:commandButton
+									id="modificarEmpresaCommandLinkId"
+									action="#{admEmpresaController.modificarEmpresa}"
+									update=":frmAdmEmpresa:mensajes :frmAdmEmpresa:admEmpresaPanelGroupId"
+									ajax="true"
+									process="@form"
+									value="Modificar"
+									title="Modificar la Empresa"
+									icon="ui-icon-pencil"
+									styleClass="boton">
+								</p:commandButton>
+								<h:outputText value="&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;" />
+								<p:commandButton
+									id="cancelarModificarCommandLinkId"
+									action="#{admEmpresaController.cancelarIn}"
+									update=":frmAdmEmpresa:mensajes :frmAdmEmpresa:admEmpresaPanelGroupId"
+									ajax="true"
+									process="@this"
+									value="Cancelar"
+									title="Cancelar"
+									icon="ui-icon-cancel"
+									styleClass="boton">
+								</p:commandButton>
+							</h:panelGroup>
+						</div>
+					</f:facet>
+				</p:panel>
+			</h:panelGroup>
+			
+			<h:panelGroup id="nuevaEmpresaPanelGroupId" rendered="#{admEmpresaDataManager.mostrarNuevaEmpresa}">
+				<h:panelGroup styleClass="barraInferior">
+					<p:commandButton
+						id="nuevaEmpresaCommandLinkId"
+						action="#{admEmpresaController.nuevaEmpresa}"
+						update=":frmAdmEmpresa:mensajes :frmAdmEmpresa:admEmpresaPanelGroupId"
+						ajax="true"
+						process="@this"
+						value="#{i18n['lbl.nueva']}"
+						title="Nueva Empresa"
+						icon="ui-icon-document"
+						styleClass="boton">
+					</p:commandButton>
+				</h:panelGroup>
+			</h:panelGroup>
+			
+			<h:panelGroup id="mostrarEmpresasPanelGroupId" rendered="#{admEmpresaDataManager.mostrarEmpresas}">
+				<p:panel>
+					<p:dataTable
+						id="empresasDataTableId"
+						emptyMessage="#{i18n['msg.no.registros.mostrar']}" 
+						paginator="true"
+						paginatorPosition="bottom"
+						paginatorAlwaysVisible="false"
+						value="#{admEmpresaDataManager.empresas}"
+						var="empresa"
+						rows="#{admEmpresaDataManager.maxRowsTabla}"
+						rowIndexVar="numRow"
+						styleClass="paginador">
+						
+						<p:column styleClass="colorLabel" style="width: 3%;">
+								<f:facet name="header">
+								<h:outputText styleClass="colorLabel" value="No." />
+							</f:facet>
+							<h:outputText value="#{numRow + 1}" />
+						</p:column>
+
+						<p:column styleClass="columnasCSS" style="width: 53%;">
+							<f:facet name="header">
+								<h:outputText styleClass="colorLabel" value="#{i18n['lbl.empresa']}" />
+							</f:facet>
+							<p:outputLabel value="#{empresa.nombre}" />
+						</p:column>
+						
+						<p:column styleClass="columnasCSS" style="width: 10%;">
+								<f:facet name="header">
+									<h:outputText styleClass="colorLabel" value="#{i18n['lbl.ruc']}" />
+								</f:facet>
+								<h:outputText value="#{empresa.ruc}" />
+							</p:column>
+						
+						<p:column styleClass="columnasCSS" style="width: 10%;">
+							<f:facet name="header">
+								<h:outputText styleClass="colorLabel" value="#{i18n['lbl.descarga.inicio']}" />
+							</f:facet>
+							<h:outputText value="#{empresa.fechaInitDownload}" />
+						</p:column>
+						
+						<p:column styleClass="columnasCSS" style="width: 10%;">
+							<f:facet name="header">
+								<h:outputText styleClass="colorLabel" value="#{i18n['lbl.descarga.actual']}" />
+							</f:facet>
+							<h:outputText value="#{empresa.fechaDownload}" />
+						</p:column>
+						
+						<p:column styleClass="columnasCSS" style="width: 10%;">
+							<f:facet name="header">
+								<h:outputText styleClass="colorLabel" value="#{i18n['lbl.estado']}" />
+							</f:facet>
+							<h:outputText value="Activo" rendered="#{empresa.estado == true}" />
+							<h:outputText value="Inactivo" rendered="#{empresa.estado == false}" />
+						</p:column>
+						
+						<p:column styleClass="columnasCSS" style="width: 4%;">
+							<div class="contenidoCentro">
+								<p:commandButton
+									id="modificarEmpresaCommandLinkId"
+									action="#{admEmpresaController.inicioModificarEmpresa(empresa)}"
+									update=":frmAdmEmpresa:mensajes :frmAdmEmpresa:admEmpresaPanelGroupId"
+									ajax="true"
+									process="@this"
+									title="Modificar"
+									icon="ui-icon-pencil"
+									styleClass="boton">
+								</p:commandButton>
+							</div>
+						</p:column>
+					</p:dataTable>
+				</p:panel>
+			</h:panelGroup>
+		</h:panelGroup>
+	</ui:define>
+</ui:composition>

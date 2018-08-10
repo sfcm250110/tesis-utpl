@@ -1,0 +1,161 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:s="http://java.sun.com/jsf/composite/components"
+	template="/templates/ui.xhtml">
+	
+	<ui:param name="idForm" 	            value="frmAdmErrorSistema"	 				 />
+	<ui:param name="form"               	value="#{admErrorSistemaControlador.form}"	 />
+	<ui:param name="controlador"        	value="#{admErrorSistemaControlador}"		 />
+	<ui:param name="tituloMenuActual"       value="Mostrar Errores Sistema"				 />
+	<ui:param name="tituloOpcionUsuario"   	value="Mostrar Errores Sistema"				 />
+	<ui:param name="tituloPaginaActual" 	value="VER ERRORES SISTEMA"				 	 />
+	
+	<ui:define name="contentBody">
+		<h:panelGroup id="generalPanelGroupId">
+		
+			<h:panelGroup id="busquedaPanelGroupId">
+				<p:panel id="busquedaPanelId">
+					<h:outputText value="Criterios de B&#250;squeda" styleClass="subtitulos" />
+					<h:panelGrid columns="2" cellpadding="0" cellspacing="0" border="0" columnClasses="labelFormulario, contentFormulario">
+						<p:outputLabel value="#{i18n['lbl.modulo']}: " />
+						<p:selectOneMenu value="#{admErrorSistemaDataManager.errorSistema.modulo}" styleClass="withSelectOneMenu">
+							<f:selectItem itemLabel="Seleccione ..." itemValue="" />
+							<f:selectItems value="#{admErrorSistemaDataManager.modulosSelectItem}" />
+						</p:selectOneMenu>
+						
+						<p:outputLabel value="#{i18n['lbl.nivel']}:" />
+						<p:selectOneMenu value="#{admErrorSistemaDataManager.errorSistema.nivel}" styleClass="withSelectOneMenu">
+							<f:selectItem itemLabel="Seleccione ..." itemValue="" />
+							<f:selectItems value="#{admErrorSistemaDataManager.nivelesSelectItem}" />
+						</p:selectOneMenu>
+						
+						<p:outputLabel value="#{i18n['lbl.fecha.registro']}:" />
+						<p:calendar value="#{admErrorSistemaDataManager.errorSistema.fechaRegistro}" showOn="button" pattern="yyyy-MM-dd" />
+					</h:panelGrid>
+					<f:facet name="footer">
+						<div align="center">
+							<h:panelGroup styleClass="barraInferior">
+								<p:commandButton
+									id="consultarCmdBtnId"
+									action="#{admErrorSistemaControlador.consultar}"
+									update=":frmAdmErrorSistema:mensajes :frmAdmErrorSistema:generalPanelGroupId"
+									ajax="true"
+									process="@form"
+									value="#{i18n['lbl.consultar']}"
+									title="#{i18n['lbl.consultar']}"
+									icon="ui-icon-search"
+									styleClass="boton">
+								</p:commandButton>
+								<h:outputText value="&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;" />
+								<p:commandButton
+									id="cancelarCmdBtnId"
+									action="#{admErrorSistemaControlador.cancelar}"
+									update=":frmAdmErrorSistema:mensajes :frmAdmErrorSistema:generalPanelGroupId"
+									ajax="true"
+									process="@this"
+									value="#{i18n['lbl.cancelar']}"
+									title="#{i18n['lbl.cancelar']}"
+									icon="ui-icon-search"
+									styleClass="boton">
+								</p:commandButton>
+							</h:panelGroup>
+						</div>
+					</f:facet>
+				</p:panel>
+			</h:panelGroup>
+			
+			<p:spacer height="35" />
+			
+			<h:panelGroup id="mostarErroresPanelGroupId">
+				<p:panel>
+					<p:dataTable
+						id="mostrarErroresDataTableId"
+						paginator="true"
+						paginatorPosition="bottom"
+						emptyMessage="No hay errores registrados"
+						value="#{admErrorSistemaDataManager.erroresSistema}"
+						var="error"
+						rows="#{admErrorSistemaDataManager.maxRowsTabla}"
+						rowIndexVar="numRow">
+						
+						<p:column style="width: 3%;">
+							<f:facet name="header">
+								<h:outputText styleClass="colorLabel" value="No." />
+							</f:facet>
+							<div class="contenidoCentro">
+								<h:outputText id="numberOutputTextId" styleClass="colorLabel" value="#{numRow + 1}" />
+								<p:overlayPanel
+									id="infoErrorOverlayPanelId" 
+									for="numberOutputTextId"
+									hideEffect="explode"
+									showEvent="mouseover"
+									hideEvent="mouseout" 
+									dismissable="false"
+									showCloseIcon="true"
+									dinamyc="true">
+									<h:panelGrid columns="2" cellpadding="0" cellspacing="0" border="0" columnClasses="labelFormularioSmall, contentFormulario">
+										<p:outputLabel style="color: #b8ec79;" value="Localizaci&#243;n: " />
+										<p:outputLabel value="#{error.localizacion}" />
+										<p:outputLabel style="color: #b8ec79;" value="Nivel: " />
+										<p:outputLabel value="#{error.nivel}" />
+									</h:panelGrid>
+								</p:overlayPanel>
+							</div>
+						</p:column>
+						
+						<p:column style="width: 5%;">
+							<f:facet name="header">
+								<h:outputText styleClass="colorLabel" value="M&#243;dulo" />
+							</f:facet>
+							<h:outputText value="#{error.modulo}" />
+						</p:column>
+						
+						<p:column style="width: 15%;">
+							<f:facet name="header">
+								<h:outputText styleClass="colorLabel" value="Fecha Registro" />
+							</f:facet>
+							<h:outputText value="#{error.fechaRegistro}" />
+						</p:column>
+						
+						<p:column style="width: 30%;">
+							<f:facet name="header">
+								<h:outputText styleClass="colorLabel" value="Mensaje Usuario" />
+							</f:facet>
+							<h:outputText value="#{error.mensajeUsuario}" />
+						</p:column>
+						
+						<p:column style="width: 42%;">
+							<f:facet name="header">
+								<h:outputText styleClass="colorLabel" value="Mensaje Sistema" />
+							</f:facet>
+							<h:outputText value="#{error.mensaje}" />
+						</p:column>
+						
+						<p:column style="width: 5%;">
+							<f:facet name="header">
+								<h:outputText styleClass="colorLabel" value="Detalle" />
+							</f:facet>
+							<div class="contenidoCentro">
+								<p:commandButton
+									icon="ui-icon-search"
+									actionListener="#{admErrorSistemaControlador.verDetalle(error.idErrorSistema)}"
+									oncomplete="PF('verDetalleErrorWidgetVar').show();"
+									update=":frmAdmErrorSistema:verDetalleErrorDialogId">
+								</p:commandButton>
+							</div>
+						</p:column>
+					</p:dataTable>
+				</p:panel>
+			</h:panelGroup>
+			
+			<h:panelGroup id="verDetalleErrorPanelGroupId">
+				<p:dialog id="verDetalleErrorDialogId" widgetVar="verDetalleErrorWidgetVar" header="Detalle del Error" resizable="false" modal="true" height="550" width="1250">
+					#{admErrorSistemaDataManager.printTraceTrace}
+				</p:dialog>
+			</h:panelGroup>
+		</h:panelGroup>
+	</ui:define>
+</ui:composition>

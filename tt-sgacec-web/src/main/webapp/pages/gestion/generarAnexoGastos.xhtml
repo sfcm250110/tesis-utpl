@@ -1,0 +1,171 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:s="http://java.sun.com/jsf/composite/components"
+	template="/templates/ui.xhtml">
+	
+	<ui:param name="idForm" 	            value="frmGenerarAnexoGastos" 				 	/>
+	<ui:param name="form"               	value="#{generarAnexoGastosControlador.form}"	/>
+	<ui:param name="controlador"        	value="#{generarAnexoGastosControlador}"		/>
+	<ui:param name="tituloMenuActual"       value="Generar Anexo Gastos"					/>
+	<ui:param name="tituloOpcionUsuario"   	value="Generar Anexo Gastos" 		 			/>
+	<ui:param name="tituloPaginaActual" 	value="GENERAR ANEXO DE GASTOS" 		 		/>
+	
+	<ui:define name="contentBody">
+		<h:panelGroup id="generalPanelGroupId">
+			<h:panelGroup id="busquedaPanelGroupId">
+				<p:panel id="busquedaPanelId">
+					<h:outputText value="Per&#237;odo del Anexo de Gastos" styleClass="subtitulos" />
+					<h:panelGrid columns="1" cellpadding="0" cellspacing="0" border="0" style="width:100%">
+						<h:panelGrid columns="2" cellpadding="0" cellspacing="0" border="0" columnClasses="labelFormulario, contentFormulario">
+							<p:outputLabel value="#{i18n['lbl.periodo']}: " />
+							<p:selectOneMenu
+								value="#{generarAnexoGastosDataManager.anexoGasto.periodo}"
+								styleClass="withSelectOneMenu"
+								required="true"
+								requiredMessage="#{i18n['lbl.periodo']} #{i18n['txt.requerido']}">
+								<f:selectItem itemLabel="Seleccione..." />
+								<f:selectItems
+									value="#{generarAnexoGastosDataManager.periodos}"
+									var="periodo"
+									itemLabel="#{periodo.name}"
+									itemValue="#{periodo.value}">
+								</f:selectItems>
+							</p:selectOneMenu>
+						</h:panelGrid>
+						<h:panelGrid columns="1" cellpadding="0" cellspacing="0" border="0" style="width:100%">
+							<p:spacer height="10" />
+						</h:panelGrid>
+						<h:panelGrid columns="1" cellpadding="0" cellspacing="0" border="0" style="width:100%">
+							<h:panelGroup id="graphicPanelGroupId">
+							<h:panelGroup rendered="#{generarAnexoGastosDataManager.mostrarAnexoExel}">
+								<p:panel>
+									<h:panelGrid columns="1" columnClasses="left, right" style="width:100%">
+										<h:panelGrid columns="4" columnClasses="left, right" style="width:100%">
+											<p:chart type="pie" model="#{generarAnexoGastosDataManager.viviendaPieChartModel}" 	   style="width:240px; height:180px" />
+											<p:chart type="pie" model="#{generarAnexoGastosDataManager.saludPieChartModel}" 	   style="width:240px; height:180px" />
+											<p:chart type="pie" model="#{generarAnexoGastosDataManager.educacionPieChartModel}"    style="width:240px; height:180px" />
+											<p:chart type="pie" model="#{generarAnexoGastosDataManager.alimentacionPieChartModel}" style="width:240px; height:180px" />
+										</h:panelGrid>
+										<h:panelGrid columns="4" style="width:100%">
+											<p:chart type="pie" model="#{generarAnexoGastosDataManager.vestimentaPieChartModel}" 			   style="width:240px; height:180px" />
+											<p:chart type="pie" model="#{generarAnexoGastosDataManager.anexoGastosPieChartModel}" 			   style="width:240px; height:180px" />
+											<p:chart type="pie" model="#{generarAnexoGastosDataManager.consolidadoPieChartModel}"			   style="width:240px; height:180px" />
+											<p:chart type="pie" model="#{generarAnexoGastosDataManager.totalBaseImponiblePieChartModel}" style="width:240px; height:180px" />
+										</h:panelGrid>
+									</h:panelGrid>
+								</p:panel>
+							</h:panelGroup>
+						</h:panelGroup>
+						</h:panelGrid>
+					</h:panelGrid>
+					<f:facet name="footer">
+						<div align="center">
+							<h:panelGroup styleClass="barraInferior">
+								<p:commandButton
+									id="consultarCommandLinkId"
+									action="#{generarAnexoGastosControlador.generarAnexoGastos}"
+									update=":frmGenerarAnexoGastos:mensajes :frmGenerarAnexoGastos:generalPanelGroupId :frmGenerarAnexoGastos:graphicPanelGroupId"
+									ajax="true"
+									process="@form"
+									value="#{i18n['lbl.generar']}"
+									title="#{i18n['lbl.generar']}"
+									icon="ui-icon-gear"
+									styleClass="boton">
+								</p:commandButton>
+								<h:outputText value="&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;" />
+								<p:commandButton
+									id="cancelarCmdLinkId"
+									action="#{generarAnexoGastosControlador.cancelar}"
+									update=":frmGenerarAnexoGastos:mensajes :frmGenerarAnexoGastos:generalPanelGroupId"
+									ajax="true"
+									process="@this"
+									value="#{i18n['lbl.cancelar']}"
+									title="#{i18n['lbl.cancelar']}"
+									icon="ui-icon-search"
+									styleClass="boton">
+								</p:commandButton>
+							</h:panelGroup>
+						</div>
+					</f:facet>
+				</p:panel>
+			</h:panelGroup>
+			
+			<p:spacer height="35" />
+			
+			<h:panelGroup id="downloadPanelGroupId">
+				<h:panelGroup rendered="#{generarAnexoGastosDataManager.mostrarAnexoExel}">
+					<p:panel id="uploadFileComprobantesPanelId">
+						<h:outputText value="Descarga" styleClass="subtitulos" />
+						<h:panelGrid columns="2" cellpadding="0" cellspacing="0" border="0" style="width:100%">
+							<h:panelGrid columns="1" cellpadding="0" cellspacing="0" border="0">
+								<h:panelGrid columns="2" cellpadding="0" cellspacing="0" border="0" columnClasses="labelFormulario, contentFormulario">
+									<h:outputText value="Consolidado" />
+									<p:commandButton
+										action="#{generarAnexoGastosControlador.downloadExcel}"
+										update=":frmGenerarAnexoGastos:mensajes :frmGenerarAnexoGastos:generalPanelGroupId"
+										ajax="true"
+										process="@this"
+										title="#{i18n['lbl.descargar']}"
+										icon="ui-icon-arrowthick-1-s"
+										styleClass="boton">
+									</p:commandButton>
+									
+									<h:outputText value="Anexo Gastos" />
+									<p:commandButton
+										action="#{generarAnexoGastosControlador.generarAnexoGastosSri}"
+										update=":frmGenerarAnexoGastos:mensajes :frmGenerarAnexoGastos:generalPanelGroupId"
+										ajax="true"
+										process="@this"
+										title="#{i18n['lbl.descargar']}"
+										icon="ui-icon-arrowthick-1-s"
+										styleClass="boton">
+									</p:commandButton>
+								</h:panelGrid>
+							</h:panelGrid>
+							<h:panelGrid columns="1" cellpadding="0" cellspacing="0" border="0">
+								<h:panelGrid columns="2" cellpadding="0" cellspacing="0" border="0" columnClasses="labelFormulario, contentFormulario">
+									<h:outputText value="#{i18n['lbl.consolidar']}" styleClass="subtitulos" for="uploadFileUploadId" />
+									<p:fileUpload
+										id="uploadFileUploadId"
+										fileUploadListener="#{generarAnexoGastosControlador.uploadConsolidarAnexoGastoUploadListener}"
+										allowTypes="/(\.|\/)(xls)$/"
+										sizeLimit="5242880"
+										update=":frmGenerarAnexoGastos:mensajes :frmGenerarAnexoGastos:uploadFileComprobantesPanelId"
+										required="true"
+										requiredMessage="#{i18n['lbl.consolidar']} #{i18n['txt.requerido']}"
+										invalidSizeMessage="#{i18n['lbl.invalid.size.message']}"
+										invalidFileMessage="#{i18n['lbl.invalid.file.message']}"
+										label="#{i18n['lbl.abrir']}"
+										description="#{i18n['lbl.cargar']}"
+										cancelLabel="#{i18n['lbl.cancelar']}"
+										uploadLabel="#{i18n['lbl.cargar']}">
+									</p:fileUpload>
+								</h:panelGrid>
+							</h:panelGrid>
+						</h:panelGrid>
+						<f:facet name="footer">
+							<div align="center">
+								<h:panelGroup styleClass="barraInferior">
+									<p:commandButton
+										id="uploadFileCommandLinkId"
+										action="#{generarAnexoGastosControlador.uploadConsolidarAnexoGasto}"
+										update=":frmGenerarAnexoGastos:mensajes :frmGenerarAnexoGastos:generalPanelGroupId"
+										ajax="true"
+										process="@form"
+										value="#{i18n['lbl.consolidar']}"
+										title="#{i18n['lbl.consolidar']}"
+										icon="ui-icon-play"
+										styleClass="boton">
+									</p:commandButton>
+								</h:panelGroup>
+							</div>
+						</f:facet>
+					</p:panel>
+				</h:panelGroup>
+			</h:panelGroup>
+		</h:panelGroup>
+	</ui:define>
+</ui:composition>

@@ -1,0 +1,442 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:s="http://java.sun.com/jsf/composite/components"
+	template="/templates/ui.xhtml">
+	
+	<ui:param name="idForm" 	            	value="frmAdmComprobanteFisico" 				/>
+	<ui:param name="form"               		value="#{admComprobanteFisicoController.form}" 	/>
+	<ui:param name="controlador"        		value="#{admComprobanteFisicoController}" 		/>
+	<ui:param name="tituloMenuActual"       	value="Administrar Comprobantes F&#237;sico" 	/>
+	<ui:param name="tituloOpcionComprobante"	value="Administrar Comprobantes F&#237;sico" 	/>
+	<ui:param name="tituloPaginaActual" 		value="ADMINISTRAR COMPROBANTES F&#205;SICOS" 	/>
+	
+	<ui:define name="contentBody">
+		<h:panelGroup id="admGeneralPanelGroupId">
+			<h:panelGroup id="loadFilePanelGroupId" rendered="#{admComprobanteFisicoDataManager.mostrarNuevoComprobanteFisico}">
+				<p:panel id="crearComprobanteOpcionPanelId">
+					<h:outputText value="#{i18n['lbl.seleccione.opcion.crear']}" styleClass="subtitulos" />
+					<h:panelGrid columns="2" cellpadding="0" cellspacing="0" border="0" columnClasses="labelFormulario, contentFormulario">
+						<p:outputLabel value="#{i18n['lbl.opcion']}: " />
+						<p:selectOneMenu
+							id="archivoSelectOneMenuId"
+							styleClass="withSelectOneMenu"
+							value="#{admComprobanteFisicoDataManager.cargaByFile}"
+							valueChangeListener="#{admComprobanteFisicoController.seleccionarCarga}">
+							<f:selectItem itemLabel="#{i18n['lbl.file']}"   itemValue="1" />
+							<f:selectItem itemLabel="#{i18n['lbl.manual']}" itemValue="2" />
+							<p:ajax update="loadFileComprobantesPanelId" />
+						</p:selectOneMenu>
+					</h:panelGrid>
+				</p:panel>
+				<p:spacer height="35" />
+				<p:panel id="loadFileComprobantesPanelId">
+					<h:outputText value="Informaci&#243;n del Archivo" styleClass="subtitulos" />
+					<h:panelGrid id="crearComprobanteFilePanelGridId" rendered="#{admComprobanteFisicoDataManager.cargaByFile == 1}" columns="2" cellpadding="0" cellspacing="0" border="0" columnClasses="labelFormulario, contentFormulario">
+						<h:outputText value="#{i18n['lbl.excel']}" styleClass="subtitulos" for="loadFileUploadId" />
+						<p:fileUpload
+							id="loadFileUploadId"
+							fileUploadListener="#{admComprobanteFisicoController.loadExcelFileUploadListener}"
+							allowTypes="/(\.|\/)(xlsx)$/"
+							sizeLimit="5242880"
+							update=":frmAdmComprobanteFisico:mensajes :frmAdmComprobanteFisico:loadFilePanelGroupId"
+							required="true"
+							requiredMessage="#{i18n['lbl.excel']} #{i18n['txt.requerido']}"
+							invalidSizeMessage="#{i18n['lbl.invalid.size.message']}"
+							invalidFileMessage="#{i18n['lbl.invalid.file.message']}"
+							label="#{i18n['lbl.abrir']}"
+							description="#{i18n['lbl.cargar']}"
+							cancelLabel="#{i18n['lbl.cancelar']}"
+							uploadLabel="#{i18n['lbl.cargar']}">
+						</p:fileUpload>
+					</h:panelGrid>
+					<h:panelGrid id="crearComprobanteManualPanelGridId" rendered="#{admComprobanteFisicoDataManager.cargaByFile == 2}" columns="4" cellpadding="0" cellspacing="0" border="0" columnClasses="labelFormulario, contentFormulario, labelFormulario, contentFormulario">
+						<p:outputLabel value="#{i18n['lbl.ruc.emisor']}: " />
+						<p:inputText value="#{admComprobanteFisicoDataManager.crearComprobanteFisico.rucEmisor}" required="true" requiredMessage="#{i18n['lbl.ruc.emisor']} #{i18n['txt.requerido']}" />
+						
+						<p:outputLabel value="#{i18n['lbl.razon.social.emisor']}:" />
+						<p:inputText value="#{admComprobanteFisicoDataManager.crearComprobanteFisico.razonSocialEmisor}" required="true" requiredMessage="#{i18n['lbl.razon.social.emisor']} #{i18n['txt.requerido']}" />
+						
+						<p:outputLabel value="#{i18n['lbl.numero.autorizacion']}:" />
+						<p:inputText value="#{admComprobanteFisicoDataManager.crearComprobanteFisico.numeroAutorizacion}" required="true" requiredMessage="#{i18n['lbl.numero.autorizacion']} #{i18n['txt.requerido']}" />
+						
+						<p:outputLabel value="#{i18n['lbl.punto.emision']}:" />
+						<p:inputText value="#{admComprobanteFisicoDataManager.crearComprobanteFisico.puntoEmision}" required="true" requiredMessage="#{i18n['lbl.punto.emision']} #{i18n['txt.requerido']}" />
+						
+						<p:outputLabel value="#{i18n['lbl.establecimiento']}:" />
+						<p:inputText value="#{admComprobanteFisicoDataManager.crearComprobanteFisico.establecimiento}" required="true" requiredMessage="#{i18n['lbl.establecimiento']} #{i18n['txt.requerido']}" />
+						
+						<p:outputLabel value="#{i18n['lbl.secuencial']}:" />
+						<p:inputText value="#{admComprobanteFisicoDataManager.crearComprobanteFisico.secuencial}" required="true" requiredMessage="#{i18n['lbl.secuencial']} #{i18n['txt.requerido']}" />
+						
+						<p:outputLabel value="#{i18n['lbl.fecha.emision']}: " />
+						<p:calendar value="#{admComprobanteFisicoDataManager.crearComprobanteFisico.fechaEmision}" required="true" requiredMessage="#{i18n['lbl.fecha.emision']} #{i18n['txt.requerido']}" showOn="button" pattern="yyyy-MM-dd" />
+						
+						<p:outputLabel value="#{i18n['lbl.base.imponible']}:" />
+						<p:inputText value="#{admComprobanteFisicoDataManager.crearComprobanteFisico.baseImponible}" required="true" requiredMessage="#{i18n['lbl.base.imponible']} #{i18n['txt.requerido']}" />
+						
+						<p:outputLabel value="#{i18n['lbl.iva']}:" />
+						<p:inputText value="#{admComprobanteFisicoDataManager.crearComprobanteFisico.iva}" required="true" requiredMessage="#{i18n['lbl.iva']} #{i18n['txt.requerido']}" />
+						
+						<p:outputLabel value="#{i18n['lbl.total']}:" />
+						<p:inputText value="#{admComprobanteFisicoDataManager.crearComprobanteFisico.total}" required="true" requiredMessage="#{i18n['lbl.total']} #{i18n['txt.requerido']}" />
+						
+						<p:outputLabel value="#{i18n['lbl.vivienda']}:" />
+						<p:inputText value="#{admComprobanteFisicoDataManager.crearComprobanteFisico.vivienda}" required="true" requiredMessage="#{i18n['lbl.vivienda']} #{i18n['txt.requerido']}" />
+						
+						<p:outputLabel value="#{i18n['lbl.educacion']}:" />
+						<p:inputText value="#{admComprobanteFisicoDataManager.crearComprobanteFisico.educacion}" required="true" requiredMessage="#{i18n['lbl.educacion']} #{i18n['txt.requerido']}" />
+						
+						<p:outputLabel value="#{i18n['lbl.alimentacion']}:" />
+						<p:inputText value="#{admComprobanteFisicoDataManager.crearComprobanteFisico.alimentacion}" required="true" requiredMessage="#{i18n['lbl.alimentacion']} #{i18n['txt.requerido']}" />
+						
+						<p:outputLabel value="#{i18n['lbl.vestimenta']}:" />
+						<p:inputText value="#{admComprobanteFisicoDataManager.crearComprobanteFisico.vestimenta}" required="true" requiredMessage="#{i18n['lbl.vestimenta']} #{i18n['txt.requerido']}" />
+						
+						<p:outputLabel value="#{i18n['lbl.salud']}:" />
+						<p:inputText value="#{admComprobanteFisicoDataManager.crearComprobanteFisico.salud}" required="true" requiredMessage="#{i18n['lbl.salud']} #{i18n['txt.requerido']}" />
+						
+						<h:outputText value="#{i18n['lbl.comprobante']}" styleClass="subtitulos" for="comprobanteUploadId" />
+						<h:panelGrid columns="1" cellpadding="0" cellspacing="0" border="0" columnClasses="contentFormulario">
+							<p:fileUpload
+								id="comprobanteUploadId"
+								fileUploadListener="#{admComprobanteFisicoController.loadComprobanteFileUploadListener}"
+								allowTypes="/(\.|\/)(png)$/"
+								sizeLimit="5242880"
+								required="true"
+								requiredMessage="#{i18n['lbl.comprobante']} #{i18n['txt.requerido']}"
+								invalidSizeMessage="#{i18n['lbl.invalid.size.message']}"
+								update="nameFileCrearComprobanteOutputTextId"
+								label="#{i18n['lbl.abrir']}"
+								description="#{i18n['lbl.cargar']}"
+								cancelLabel="#{i18n['lbl.cancelar']}"
+								uploadLabel="#{i18n['lbl.cargar']}">
+							</p:fileUpload>
+							<h:outputText id="nameFileCrearComprobanteOutputTextId" value="#{admComprobanteFisicoDataManager.crearComprobanteFisico.nombreComprobanteImagen}" />
+						</h:panelGrid>
+					</h:panelGrid>
+					<f:facet name="footer">
+						<div align="center">
+							<h:panelGroup styleClass="barraInferior">
+								<p:commandButton
+									id="loadFileCommandLinkId"
+									action="#{admComprobanteFisicoController.crearComprobante}"
+									update=":frmAdmComprobanteFisico:mensajes :frmAdmComprobanteFisico:admGeneralPanelGroupId"
+									ajax="true"
+									process="@form"
+									value="#{i18n['lbl.crear']}"
+									title="#{i18n['lbl.crear']}"
+									icon="ui-icon-disk"
+									styleClass="boton">
+								</p:commandButton>
+								<h:outputText value="&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;" />
+								<p:commandButton
+									id="cancelarLoadFileCommandLinkId"
+									action="#{admComprobanteFisicoController.cancelarIn}"
+									update=":frmAdmComprobanteFisico:mensajes :frmAdmComprobanteFisico:admGeneralPanelGroupId"
+									ajax="true"
+									process="@this"
+									value="#{i18n['lbl.cancelar']}"
+									title="#{i18n['lbl.cancelar']}"
+									icon="ui-icon-cancel"
+									styleClass="boton">
+								</p:commandButton>
+							</h:panelGroup>
+						</div>
+					</f:facet>
+				</p:panel>
+			</h:panelGroup>
+			
+			<h:panelGroup id="modificarComprobantePanelGroupId" rendered="#{admComprobanteFisicoDataManager.mostrarModificarComprobanteFisico}">
+				<p:panel id="modificarComprobantesPanelId">
+					<h:outputText value="Informaci&#243;n del Comprobante a Modificar" styleClass="subtitulos" />
+					<h:panelGrid id="informacionComprobanteModificarPanelGridId" columns="4" cellpadding="0" cellspacing="0" border="0" columnClasses="labelFormulario, contentFormulario, labelFormulario, contentFormulario">
+						<p:outputLabel value="#{i18n['lbl.ruc.emisor']}: " />
+						<p:inputText value="#{admComprobanteFisicoDataManager.modificarComprobanteFisico.rucEmisor}" required="true" requiredMessage="#{i18n['lbl.ruc.emisor']} #{i18n['txt.requerido']}" />
+						
+						<p:outputLabel value="#{i18n['lbl.razon.social.emisor']}:" />
+						<p:inputText value="#{admComprobanteFisicoDataManager.modificarComprobanteFisico.razonSocialEmisor}" required="true" requiredMessage="#{i18n['lbl.razon.social.emisor']} #{i18n['txt.requerido']}" />
+						
+						<p:outputLabel value="#{i18n['lbl.numero.autorizacion']}:" />
+						<p:inputText value="#{admComprobanteFisicoDataManager.modificarComprobanteFisico.numeroAutorizacion}" required="true" requiredMessage="#{i18n['lbl.numero.autorizacion']} #{i18n['txt.requerido']}" />
+						
+						<p:outputLabel value="#{i18n['lbl.punto.emision']}:" />
+						<p:inputText value="#{admComprobanteFisicoDataManager.modificarComprobanteFisico.puntoEmision}" required="true" requiredMessage="#{i18n['lbl.punto.emision']} #{i18n['txt.requerido']}" />
+						
+						<p:outputLabel value="#{i18n['lbl.establecimiento']}:" />
+						<p:inputText value="#{admComprobanteFisicoDataManager.modificarComprobanteFisico.establecimiento}" required="true" requiredMessage="#{i18n['lbl.establecimiento']} #{i18n['txt.requerido']}" />
+						
+						<p:outputLabel value="#{i18n['lbl.secuencial']}:" />
+						<p:inputText value="#{admComprobanteFisicoDataManager.modificarComprobanteFisico.secuencial}" required="true" requiredMessage="#{i18n['lbl.secuencial']} #{i18n['txt.requerido']}" />
+						
+						<p:outputLabel value="#{i18n['lbl.fecha.emision']}: " />
+						<p:calendar value="#{admComprobanteFisicoDataManager.modificarComprobanteFisico.fechaEmision}" required="true" requiredMessage="#{i18n['lbl.fecha.emision']} #{i18n['txt.requerido']}" showOn="button" pattern="yyyy-MM-dd" />
+						
+						<p:outputLabel value="#{i18n['lbl.base.imponible']}:" />
+						<p:inputText value="#{admComprobanteFisicoDataManager.modificarComprobanteFisico.baseImponible}" required="true" requiredMessage="#{i18n['lbl.base.imponible']} #{i18n['txt.requerido']}" />
+						
+						<p:outputLabel value="#{i18n['lbl.iva']}:" />
+						<p:inputText value="#{admComprobanteFisicoDataManager.modificarComprobanteFisico.iva}" required="true" requiredMessage="#{i18n['lbl.iva']} #{i18n['txt.requerido']}" />
+						
+						<p:outputLabel value="#{i18n['lbl.total']}:" />
+						<p:inputText value="#{admComprobanteFisicoDataManager.modificarComprobanteFisico.total}" required="true" requiredMessage="#{i18n['lbl.total']} #{i18n['txt.requerido']}" />
+						
+						<p:outputLabel value="#{i18n['lbl.vivienda']}:" />
+						<p:inputText value="#{admComprobanteFisicoDataManager.modificarComprobanteFisico.vivienda}" required="true" requiredMessage="#{i18n['lbl.vivienda']} #{i18n['txt.requerido']}" />
+						
+						<p:outputLabel value="#{i18n['lbl.educacion']}:" />
+						<p:inputText value="#{admComprobanteFisicoDataManager.modificarComprobanteFisico.educacion}" required="true" requiredMessage="#{i18n['lbl.educacion']} #{i18n['txt.requerido']}" />
+						
+						<p:outputLabel value="#{i18n['lbl.alimentacion']}:" />
+						<p:inputText value="#{admComprobanteFisicoDataManager.modificarComprobanteFisico.alimentacion}" required="true" requiredMessage="#{i18n['lbl.alimentacion']} #{i18n['txt.requerido']}" />
+						
+						<p:outputLabel value="#{i18n['lbl.vestimenta']}:" />
+						<p:inputText value="#{admComprobanteFisicoDataManager.modificarComprobanteFisico.vestimenta}" required="true" requiredMessage="#{i18n['lbl.vestimenta']} #{i18n['txt.requerido']}" />
+						
+						<p:outputLabel value="#{i18n['lbl.salud']}:" />
+						<p:inputText value="#{admComprobanteFisicoDataManager.modificarComprobanteFisico.salud}" required="true" requiredMessage="#{i18n['lbl.salud']} #{i18n['txt.requerido']}" />
+						
+						<h:outputText value="#{i18n['lbl.comprobante']}" styleClass="subtitulos" for="modificarUploadId" />
+						<h:panelGrid columns="1" cellpadding="0" cellspacing="0" border="0" columnClasses="contentFormulario">
+							<p:fileUpload
+								id="modificarUploadId"
+								fileUploadListener="#{admComprobanteFisicoController.updateComprobanteFileUploadListener}"
+								allowTypes="/(\.|\/)(png)$/"
+								sizeLimit="5242880"
+								invalidSizeMessage="#{i18n['lbl.invalid.size.message']}"
+								update="nameFileComprobanteOutputTextId"
+								label="#{i18n['lbl.abrir']}"
+								description="#{i18n['lbl.cargar']}"
+								cancelLabel="#{i18n['lbl.cancelar']}"
+								uploadLabel="#{i18n['lbl.cargar']}">
+							</p:fileUpload>
+							<h:outputText id="nameFileComprobanteOutputTextId" value="#{admComprobanteFisicoDataManager.modificarComprobanteFisico.nombreComprobanteImagen}" />
+						</h:panelGrid>
+					</h:panelGrid>
+					<f:facet name="footer">
+						<div align="center">
+							<h:panelGroup styleClass="barraInferior">
+								<p:commandButton
+									id="modificarComprobanteCommandLinkId"
+									action="#{admComprobanteFisicoController.modificarComprobante}"
+									update=":frmAdmComprobanteFisico:mensajes :frmAdmComprobanteFisico:admGeneralPanelGroupId"
+									ajax="true"
+									process="@form"
+									value="#{i18n['lbl.modificar']}"
+									title="#{i18n['lbl.modificar']}"
+									icon="ui-icon-pencil"
+									styleClass="boton">
+								</p:commandButton>
+								<h:outputText value="&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;" />
+								<p:commandButton
+									id="cancelarModificarCommandLinkId"
+									action="#{admComprobanteFisicoController.cancelarIn}"
+									update=":frmAdmComprobanteFisico:mensajes :frmAdmComprobanteFisico:admGeneralPanelGroupId"
+									ajax="true"
+									process="@this"
+									value="#{i18n['lbl.cancelar']}"
+									title="#{i18n['lbl.cancelar']}"
+									icon="ui-icon-cancel"
+									styleClass="boton">
+								</p:commandButton>
+							</h:panelGroup>
+						</div>
+					</f:facet>
+				</p:panel>
+			</h:panelGroup>
+			
+			<h:panelGroup id="eliminarComprobantePanelGroupId" rendered="#{admComprobanteFisicoDataManager.mostrarEliminarComprobanteFisico}">
+				<p:panel id="eliminarComprobantesPanelId">
+					<h:outputText value="Informaci&#243;n del Comprobante a Eliminar" styleClass="subtitulos" />
+					<h:panelGrid id="informacionComprobanteEliminarPanelGridId" columns="4" cellpadding="0" cellspacing="0" border="0" columnClasses="labelFormulario, contentFormulario, labelFormulario, contentFormulario">
+						<p:outputLabel value="#{i18n['lbl.ruc.emisor']}: " />
+						<p:outputLabel value="#{admComprobanteFisicoDataManager.eliminarComprobanteFisico.rucEmisor}" />
+						
+						<p:outputLabel value="#{i18n['lbl.razon.social.emisor']}:" />
+						<p:outputLabel value="#{admComprobanteFisicoDataManager.eliminarComprobanteFisico.razonSocialEmisor}" />
+						
+						<p:outputLabel value="#{i18n['lbl.numero.autorizacion']}:" />
+						<p:outputLabel value="#{admComprobanteFisicoDataManager.eliminarComprobanteFisico.numeroAutorizacion}" />
+						
+						<p:outputLabel value="#{i18n['lbl.punto.emision']}:" />
+						<p:outputLabel value="#{admComprobanteFisicoDataManager.eliminarComprobanteFisico.puntoEmision}" />
+						
+						<p:outputLabel value="#{i18n['lbl.establecimiento']}:" />
+						<p:outputLabel value="#{admComprobanteFisicoDataManager.eliminarComprobanteFisico.establecimiento}" />
+						
+						<p:outputLabel value="#{i18n['lbl.secuencial']}:" />
+						<p:outputLabel value="#{admComprobanteFisicoDataManager.eliminarComprobanteFisico.secuencial}" />
+						
+						<p:outputLabel value="#{i18n['lbl.fecha.emision']}: " />
+						<p:outputLabel value="#{admComprobanteFisicoDataManager.eliminarComprobanteFisico.fechaEmision}">
+							<f:convertDateTime pattern="yyyy-MM-dd" />
+						</p:outputLabel>
+						
+						<p:outputLabel value="#{i18n['lbl.base.imponible']}:" />
+						<p:outputLabel value="#{admComprobanteFisicoDataManager.eliminarComprobanteFisico.baseImponible}" />
+						
+						<p:outputLabel value="#{i18n['lbl.iva']}:" />
+						<p:outputLabel value="#{admComprobanteFisicoDataManager.eliminarComprobanteFisico.iva}" />
+						
+						<p:outputLabel value="#{i18n['lbl.total']}:" />
+						<p:outputLabel value="#{admComprobanteFisicoDataManager.eliminarComprobanteFisico.total}" />
+						
+						<p:outputLabel value="#{i18n['lbl.vivienda']}:" />
+						<p:outputLabel value="#{admComprobanteFisicoDataManager.eliminarComprobanteFisico.vivienda}" />
+						
+						<p:outputLabel value="#{i18n['lbl.educacion']}:" />
+						<p:outputLabel value="#{admComprobanteFisicoDataManager.eliminarComprobanteFisico.educacion}" />
+						
+						<p:outputLabel value="#{i18n['lbl.alimentacion']}:" />
+						<p:outputLabel value="#{admComprobanteFisicoDataManager.eliminarComprobanteFisico.alimentacion}" />
+						
+						<p:outputLabel value="#{i18n['lbl.vestimenta']}:" />
+						<p:outputLabel value="#{admComprobanteFisicoDataManager.eliminarComprobanteFisico.vestimenta}" />
+						
+						<p:outputLabel value="#{i18n['lbl.salud']}:" />
+						<p:outputLabel value="#{admComprobanteFisicoDataManager.eliminarComprobanteFisico.salud}" />
+					</h:panelGrid>
+					<f:facet name="footer">
+						<div align="center">
+							<h:panelGroup styleClass="barraInferior">
+								<p:commandButton
+									id="eliminarComprobanteCommandLinkId"
+									action="#{admComprobanteFisicoController.eliminarComprobante}"
+									update=":frmAdmComprobanteFisico:mensajes :frmAdmComprobanteFisico:admGeneralPanelGroupId"
+									ajax="true"
+									process="@form"
+									value="#{i18n['lbl.eliminar']}"
+									title="#{i18n['lbl.eliminar']}"
+									icon="ui-icon-pencil"
+									styleClass="boton">
+								</p:commandButton>
+								<h:outputText value="&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;" />
+								<p:commandButton
+									id="cancelarEliminarCommandLinkId"
+									action="#{admComprobanteFisicoController.cancelarIn}"
+									update=":frmAdmComprobanteFisico:mensajes :frmAdmComprobanteFisico:admGeneralPanelGroupId"
+									ajax="true"
+									process="@this"
+									value="#{i18n['lbl.cancelar']}"
+									title="#{i18n['lbl.cancelar']}"
+									icon="ui-icon-cancel"
+									styleClass="boton">
+								</p:commandButton>
+							</h:panelGroup>
+						</div>
+					</f:facet>
+				</p:panel>
+			</h:panelGroup>
+			
+			<h:panelGroup id="newLoadFilePanelGroupId" rendered="#{admComprobanteFisicoDataManager.mostrarComprobantesFisico}">
+				<h:panelGroup styleClass="barraInferior">
+					<p:commandButton
+						id="newLoadFileCmdBtnId"
+						action="#{admComprobanteFisicoController.nuevoComprobante}"
+						update=":frmAdmComprobanteFisico:mensajes :frmAdmComprobanteFisico:admGeneralPanelGroupId"
+						ajax="true"
+						process="@this"
+						value="#{i18n['lbl.nuevo']}"
+						title="#{i18n['lbl.nuevo']}"
+						icon="ui-icon-document"
+						styleClass="boton">
+					</p:commandButton>
+				</h:panelGroup>
+			</h:panelGroup>
+			
+			<h:panelGroup id="mostrarComprobantesPanelGroupId" rendered="#{admComprobanteFisicoDataManager.mostrarComprobantesFisico}">
+				<p:panel>
+					<p:dataTable
+						id="comprobantesDataTableId"
+						emptyMessage="#{i18n['msg.no.registros.mostrar']}"
+						paginator="true"
+						paginatorPosition="bottom"
+						paginatorAlwaysVisible="false"
+						value="#{admComprobanteFisicoDataManager.comprobantesFisico}"
+						var="comprobanteFisico"
+						rows="#{consultaComprobantesDataManager.maxRowsTabla}"
+						rowIndexVar="numRow"
+						styleClass="paginador">
+						
+						<p:column styleClass="colorLabel" style="width: 3%;">
+							<f:facet name="header">
+								<h:outputText styleClass="colorLabel" value="No." />
+							</f:facet>
+							<h:outputText value="#{numRow + 1}" />
+						</p:column>
+						
+						<p:column styleClass="columnasCSS" style="width: 9%;">
+							<f:facet name="header">
+								<h:outputText styleClass="colorLabel" value="#{i18n['lbl.ruc.emisor']}" />
+							</f:facet>
+							<p:outputLabel value="#{comprobanteFisico.rucEmisor}" />
+						</p:column>
+						
+						<p:column styleClass="columnasCSS" style="width: 47%;">
+							<f:facet name="header">
+								<h:outputText styleClass="colorLabel" value="#{i18n['lbl.razon.social.emisor']}" />
+							</f:facet>
+							<p:outputLabel value="#{comprobanteFisico.razonSocialEmisor}" />
+						</p:column>
+						
+						<p:column styleClass="columnasCSS" style="width: 12%;">
+							<f:facet name="header">
+								<h:outputText styleClass="colorLabel" value="#{i18n['lbl.numero.autorizacion']}" />
+							</f:facet>
+							<p:outputLabel value="#{comprobanteFisico.numeroAutorizacion}" />
+						</p:column>
+						
+						<p:column styleClass="columnasCSS" style="width: 12%;">
+							<f:facet name="header">
+								<h:outputText styleClass="colorLabel" value="#{i18n['lbl.numero.comprobante']}" />
+							</f:facet>
+							<p:outputLabel value="#{comprobanteFisico.establecimiento}-#{comprobanteFisico.puntoEmision}-#{comprobanteFisico.secuencial}" />
+						</p:column>
+						
+						<p:column styleClass="columnasCSS" style="width: 9%;">
+							<f:facet name="header">
+								<h:outputText styleClass="colorLabel" value="#{i18n['lbl.fecha.emision']}" />
+							</f:facet>
+							<p:outputLabel value="#{comprobanteFisico.fechaEmision}">
+								<f:convertDateTime pattern="yyyy-MM-dd" />
+							</p:outputLabel>
+						</p:column>
+						
+						<p:column styleClass="columnasCSS" style="width: 4%;">
+							<div class="contenidoCentro">
+								<p:commandButton
+									id="modificarComprobanteCmdBtnId"
+									action="#{admComprobanteFisicoController.inicioModificarComprobante(comprobanteFisico)}"
+									update=":frmAdmComprobanteFisico:mensajes :frmAdmComprobanteFisico:admGeneralPanelGroupId"
+									ajax="true"
+									process="@this"
+									title="#{i18n['lbl.modificar']}"
+									icon="ui-icon-pencil"
+									styleClass="boton">
+								</p:commandButton>
+							</div>
+						</p:column>
+						
+						<p:column styleClass="columnasCSS" style="width: 4%;">
+							<div class="contenidoCentro">
+								<p:commandButton
+									id="eliminarComprobanteCmdBtnId"
+									action="#{admComprobanteFisicoController.inicioEliminarComprobante(comprobanteFisico)}"
+									update=":frmAdmComprobanteFisico:mensajes :frmAdmComprobanteFisico:admGeneralPanelGroupId"
+									ajax="true"
+									process="@this"
+									title="#{i18n['lbl.eliminar']}"
+									icon="ui-icon-trash"
+									styleClass="boton">
+								</p:commandButton>
+							</div>
+						</p:column>
+					</p:dataTable>
+				</p:panel>
+			</h:panelGroup>
+			
+		</h:panelGroup>
+	</ui:define>
+</ui:composition>

@@ -1,0 +1,154 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:s="http://java.sun.com/jsf/composite/components"
+	template="/templates/ui.xhtml">
+	
+	<ui:param name="idForm" 	            value="frmProcesarSriWs" 				 />
+	<ui:param name="form"               	value="#{procesarSriWsControlador.form}" />
+	<ui:param name="controlador"        	value="#{procesarSriWsControlador}"		 />
+	<ui:param name="tituloMenuActual"       value="Procesar Web Service Sri"		 />
+	<ui:param name="tituloOpcionUsuario"   	value="Procesar Web Service Sri" 		 />
+	<ui:param name="tituloPaginaActual" 	value="PROCESAR WEB SERVICE SRI" 		 />
+	
+	<ui:define name="contentBody">
+		<h:panelGroup id="generalPanelGroupId">
+			<h:panelGroup id="procesarSriWsPanelGroupId" rendered="#{procesarSriWsDataManager.mostrarProcesar}">
+				<p:panel id="modificarProcesarSriWsPanelId">
+					<h:outputText value="Informaci&#243;n Web Service a Procesar Sri" styleClass="subtitulos" />
+					<h:panelGrid columns="2" cellpadding="0" cellspacing="0" border="0" columnClasses="labelFormulario, contentFormulario">
+						<p:outputLabel value="#{i18n['lbl.ruc']}: " />
+						<p:outputLabel value="#{procesarSriWsDataManager.comprobanteEmpresa.ruc}" />
+						
+						<p:outputLabel value="#{i18n['lbl.clave.acceso']}:" />
+						<p:outputLabel value="#{procesarSriWsDataManager.comprobanteEmpresa.claveAcceso}" />
+						
+						<p:outputLabel value="#{i18n['lbl.numero.autorizacion']}:" />
+						<p:outputLabel value="#{procesarSriWsDataManager.comprobanteEmpresa.numeroAutorizacion}" />
+						
+						<p:outputLabel value="#{i18n['lbl.fecha.emision']}: " />
+						<p:outputLabel value="#{procesarSriWsDataManager.comprobanteEmpresa.fechaEmision}" />
+					</h:panelGrid>
+					<f:facet name="footer">
+						<div align="center">
+							<h:panelGroup styleClass="barraInferior">
+								<p:commandButton
+									id="procesarCommandLinkId"
+									action="#{procesarSriWsControlador.procesar}"
+									update=":frmProcesarSriWs:mensajes :frmProcesarSriWs:generalPanelGroupId"
+									ajax="true"
+									process="@form"
+									value="#{i18n['lbl.procesar']}"
+									title="#{i18n['lbl.procesar']}"
+									icon="ui-icon-pencil"
+									styleClass="boton">
+								</p:commandButton>
+								<h:outputText value="&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;" />
+								<p:commandButton
+									id="cancelarProcesarCommandLinkId"
+									action="#{procesarSriWsControlador.cancelarIn}"
+									update=":frmProcesarSriWs:mensajes :frmProcesarSriWs:generalPanelGroupId"
+									ajax="true"
+									process="@this"
+									value="#{i18n['lbl.cancelar']}"
+									title="#{i18n['lbl.cancelar']}"
+									icon="ui-icon-cancel"
+									styleClass="boton">
+								</p:commandButton>
+							</h:panelGroup>
+						</div>
+					</f:facet>
+				</p:panel>
+			</h:panelGroup>
+			
+			<h:panelGroup id="procesarTodoPanelGroupId" rendered="#{procesarSriWsDataManager.mostrarProcesarTodo}">
+				<h:panelGroup styleClass="barraInferior">
+					<p:commandButton
+						id="procesarTodoCmdLinkId"
+						action="#{procesarSriWsControlador.procesarTodo}"
+						update=":frmProcesarSriWs:mensajes :frmProcesarSriWs:generalPanelGroupId"
+						ajax="true"
+						process="@this"
+						value="#{i18n['lbl.procesar.todo']}"
+						title="#{i18n['lbl.procesar.todo']}"
+						icon="ui-icon-document"
+						styleClass="boton">
+					</p:commandButton>
+				</h:panelGroup>
+			</h:panelGroup>
+			
+			<h:panelGroup>
+				<h:panelGroup id="verPanelGroupId" rendered="#{!procesarSriWsDataManager.mostrarProcesar}">
+					<p:panel>
+						<p:dataTable
+							id="erroresSriDataTblId"
+							emptyMessage="#{i18n['msg.no.registros.mostrar']}"
+							paginator="true"
+							paginatorPosition="bottom"
+							paginatorAlwaysVisible="false"
+							value="#{procesarSriWsDataManager.comprobantesEmpresa}"
+							var="comprobanteEmpresa"
+							rows="#{admEmpresaDataManager.maxRowsTabla}"
+							rowIndexVar="numRow"
+							styleClass="paginador">
+							
+							<p:column styleClass="colorLabel" style="width: 3%;">
+								<f:facet name="header">
+									<h:outputText styleClass="colorLabel" value="No." />
+								</f:facet>
+								<h:outputText value="#{numRow + 1}" />
+							</p:column>
+
+							<p:column styleClass="columnasCSS" style="width: 10%;">
+								<f:facet name="header">
+									<h:outputText styleClass="colorLabel" value="#{i18n['lbl.ruc']}" />
+								</f:facet>
+								<p:outputLabel value="#{comprobanteEmpresa.ruc}" />
+							</p:column>
+							
+							<p:column styleClass="columnasCSS" style="width: 33%;">
+								<f:facet name="header">
+									<h:outputText styleClass="colorLabel" value="#{i18n['lbl.clave.acceso']}" />
+								</f:facet>
+								<p:outputLabel value="#{comprobanteEmpresa.claveAcceso}" />
+							</p:column>
+							
+							<p:column styleClass="columnasCSS" style="width: 33%;">
+								<f:facet name="header">
+									<h:outputText styleClass="colorLabel" value="#{i18n['lbl.numero.autorizacion']}" />
+								</f:facet>
+								<p:outputLabel value="#{comprobanteEmpresa.numeroAutorizacion}" />
+							</p:column>
+							
+							<p:column styleClass="columnasCSS" style="width: 10%;">
+								<f:facet name="header">
+									<h:outputText styleClass="colorLabel" value="#{i18n['lbl.fecha.emision']}" />
+								</f:facet>
+								<p:outputLabel value="#{comprobanteEmpresa.fechaEmision}" />
+							</p:column>
+							
+							<p:column styleClass="columnasCSS" style="width: 11%;">
+								<f:facet name="header">
+									<h:outputText styleClass="colorLabel" value="#{i18n['lbl.procesar']}" />
+								</f:facet>
+								<div class="contenidoCentro">
+									<p:commandButton
+										action="#{procesarSriWsControlador.inicioProcesar(comprobanteEmpresa)}"
+										update=":frmProcesarSriWs:mensajes :frmProcesarSriWs:generalPanelGroupId"
+										ajax="true"
+										process="@this"
+										title="#{i18n['lbl.procesar']}"
+										icon="ui-icon-pencil"
+										styleClass="boton">
+									</p:commandButton>
+								</div>
+							</p:column>
+						</p:dataTable>
+					</p:panel>
+				</h:panelGroup>
+			</h:panelGroup>
+		</h:panelGroup>
+	</ui:define>
+</ui:composition>

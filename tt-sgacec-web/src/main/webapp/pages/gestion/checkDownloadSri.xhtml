@@ -1,0 +1,160 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:s="http://java.sun.com/jsf/composite/components"
+	template="/templates/ui.xhtml">
+	
+	<ui:param name="idForm" 	            value="frmCheckDownloadSri" 			  	/>
+	<ui:param name="form"               	value="#{checkDownloadSriControlador.form}" />
+	<ui:param name="controlador"        	value="#{checkDownloadSriControlador}" 	  	/>
+	<ui:param name="tituloMenuActual"       value="Check Download Sri" 		  			/>
+	<ui:param name="tituloOpcionUsuario"   	value="Check Download Sri" 		  			/>
+	<ui:param name="tituloPaginaActual" 	value="CHECK DOWNLOAD SRI" 		  			/>
+	
+	<ui:define name="contentBody">
+		<h:panelGroup id="generalPanelGroupId">
+			<h:panelGroup id="checkDownloadSriPanelGroupId">
+				<p:panel id="checkDownloadSriPanelId">
+					<h:outputText value="Verificar (check) descarga del portal web del Sri" styleClass="subtitulos" />
+					<h:panelGrid columns="2" cellpadding="0" cellspacing="0" border="0" columnClasses="labelFormulario, contentFormulario">
+						<p:outputLabel value="#{i18n['lbl.fecha.descargar']}: " />
+						<p:calendar value="#{checkDownloadSriDataManager.fechaCheckDownloadSri}" showOn="button" pattern="yyyy-MM-dd" required="true" requiredMessage="#{i18n['lbl.fecha.descargar']} #{i18n['txt.requerido']}" />
+					</h:panelGrid>
+					<f:facet name="footer">
+						<div align="center">
+							<h:panelGroup styleClass="barraInferior">
+								<p:commandButton
+									id="checkDownloadSriCmdBtnId"
+									action="#{checkDownloadSriControlador.checkDownloadSri}"
+									update=":frmCheckDownloadSri:mensajes :frmCheckDownloadSri:checkDownloadSriPanelGroupId"
+									ajax="true"
+									process="@form"
+									value="#{i18n['lbl.check.download.sri']}"
+									title="#{i18n['lbl.check.download.sri']}"
+									icon="ui-icon-gear"
+									styleClass="boton">
+								</p:commandButton>
+							</h:panelGroup>
+						</div>
+					</f:facet>
+				</p:panel>
+			</h:panelGroup>
+			
+			<p:spacer height="85" />
+			
+			<h:panelGroup id="busquedaPanelGroupId">
+				<p:panel id="busquedaPanelId">
+					<h:outputText value="Criterios de B&#250;squeda" styleClass="subtitulos" />
+					<h:panelGrid columns="2" cellpadding="0" cellspacing="0" border="0" columnClasses="labelFormulario, contentFormulario">
+						<p:outputLabel value="#{i18n['lbl.fecha.descargar']}: " />
+						<p:calendar id="fechaDownloadCalendarId" value="#{checkDownloadSriDataManager.checkDownloadSri.fechaDownload}" showOn="button" pattern="yyyy-MM-dd" />
+					</h:panelGrid>
+					<f:facet name="footer">
+						<div align="center">
+							<h:panelGroup styleClass="barraInferior">
+								<p:commandButton
+									id="consultarCmdBtnId"
+									action="#{checkDownloadSriControlador.consultar}"
+									update=":frmCheckDownloadSri:mensajes :frmCheckDownloadSri:busquedaPanelGroupId :frmCheckDownloadSri:checksDownloadSriPanelGroupId"
+									ajax="true"
+									process="fechaDownloadCalendarId @this"
+									value="#{i18n['lbl.consultar']}"
+									title="#{i18n['lbl.consultar']}"
+									icon="ui-icon-search"
+									styleClass="boton">
+								</p:commandButton>
+								<h:outputText value="&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;" />
+								<p:commandButton
+									id="cancelarConsultarCmdBtnId"
+									action="#{checkDownloadSriControlador.cancelar}"
+									update=":frmCheckDownloadSri:mensajes :frmCheckDownloadSri:generalPanelGroupId"
+									ajax="true"
+									process="@this"
+									value="#{i18n['lbl.cancelar']}"
+									title="#{i18n['lbl.cancelar']}"
+									icon="ui-icon-cancel"
+									styleClass="boton">
+								</p:commandButton>
+							</h:panelGroup>
+						</div>
+					</f:facet>
+				</p:panel>
+			</h:panelGroup>
+			
+			<h:panelGroup id="checksDownloadSriPanelGroupId">
+				<p:dataTable
+					id="checksDownloadSriDataTblId"
+					emptyMessage="#{i18n['msg.no.registros.mostrar']}"
+					paginator="true"
+					paginatorPosition="bottom"
+					paginatorAlwaysVisible="false"
+					value="#{checkDownloadSriDataManager.checksDownloadSri}"
+					var="checkDownloadSri"
+					rows="#{checkDownloadSriDataManager.maxRowsTabla}"
+					rowIndexVar="numRow"
+					styleClass="paginador">
+					
+					<p:column styleClass="columnasCSS">
+						<f:facet name="header">
+							<h:outputText styleClass="colorLabel" value="No." />
+						</f:facet>
+						<h:outputText value="#{numRow + 1}" />
+					</p:column>
+					
+					<p:column styleClass="columnasCSS">
+						<f:facet name="header">
+							<h:outputText styleClass="colorLabel" value="#{i18n['lbl.etapa']}" />
+						</f:facet>
+						<p:outputLabel value="#{checkDownloadSri.lblEtapa}" />
+					</p:column>
+					
+					<p:column styleClass="columnasCSS">
+						<f:facet name="header">
+							<h:outputText styleClass="colorLabel" value="#{i18n['lbl.descarga.inicio']}" />
+						</f:facet>
+						<p:outputLabel value="#{checkDownloadSri.fechaDownload}" />
+					</p:column>
+					
+					<p:column styleClass="columnasCSS">
+						<f:facet name="header">
+							<h:outputText styleClass="colorLabel" value="#{i18n['lbl.descarga.proceso']}" />
+						</f:facet>
+						<p:outputLabel value="#{checkDownloadSri.fechaProceso}">
+							<f:convertDateTime pattern="yyyy-MM-dd HH:mm:ss" timeZone="GMT-5" />
+						</p:outputLabel>
+					</p:column>
+					
+					<p:column styleClass="columnasCSS">
+						<f:facet name="header">
+							<h:outputText styleClass="colorLabel" value="#{i18n['lbl.fila']}" />
+						</f:facet>
+						<p:outputLabel value="#{checkDownloadSri.fila}" />
+					</p:column>
+					
+					<p:column styleClass="columnasCSS">
+						<f:facet name="header">
+							<h:outputText styleClass="colorLabel" value="#{i18n['lbl.total.filas']}" />
+						</f:facet>
+						<p:outputLabel value="#{checkDownloadSri.totalFilas}" />
+					</p:column>
+					
+					<p:column styleClass="columnasCSS">
+						<f:facet name="header">
+							<h:outputText styleClass="colorLabel" value="#{i18n['lbl.paginado']}" />
+						</f:facet>
+						<p:outputLabel value="#{checkDownloadSri.paginado}" />
+					</p:column>
+					
+					<p:column styleClass="columnasCSS">
+						<f:facet name="header">
+							<h:outputText styleClass="colorLabel" value="#{i18n['lbl.total.paginas']}" />
+						</f:facet>
+						<p:outputLabel value="#{checkDownloadSri.totalPaginas}" />
+					</p:column>
+				</p:dataTable>
+			</h:panelGroup>
+		</h:panelGroup>
+	</ui:define>
+</ui:composition>

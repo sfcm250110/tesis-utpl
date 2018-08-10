@@ -1,0 +1,177 @@
+<ui:composition
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:s="http://java.sun.com/jsf/composite/components"
+	template="/templates/ui.xhtml">
+	
+	<ui:param name="idForm" 	            value="frmAdministrarParametrosSistema" 				/>
+	<ui:param name="form"               	value="#{administrarParametrosSistemaControlador.form}" />
+	<ui:param name="controlador"        	value="#{administrarParametrosSistemaControlador}" 		/>
+	<ui:param name="tituloMenuActual"       value="Administrar Par&#225;metros Sistema" 			/>
+	<ui:param name="tituloOpcionUsuario"   	value="Administraci&#243;n Par&#225;metros Sistema" 	/>
+	<ui:param name="tituloPaginaActual" 	value="ADMINISTRAR PARAMETROS SISTEMA" 					/>
+	
+	<ui:define name="contentBody">
+		<h:panelGroup id="admParametrosSistemaPanelGroupId">
+			<p:panel id="admParametrosSistemaPanelId">
+				<h:panelGroup>
+					<p:panel id="variablesSistemaPanelId">
+						<h:panelGrid id="resetPanelGridId" columns="2" cellpadding="0" cellspacing="0" border="0" columnClasses="labelFormularioGrande, contentFormularioGrande">
+							<h:outputText value="Reiniciar Variables Sessi&#243;n del Sistema:" styleClass="subtitulos" />
+							<p:commandButton
+								id="cmdLinkResetVariablesSistemaId"
+								action="#{administrarParametrosSistemaControlador.resetVariablesSession}"
+								update=":frmAdministrarParametrosSistema:mensajes :frmAdministrarParametrosSistema:admParametrosSistemaPanelGroupId"
+								ajax="true"
+								process="@form"
+								value="Reiniciar"
+								title="Reiniciar Variables Sistema"
+								icon="ui-icon-check"
+								styleClass="boton">
+							</p:commandButton>
+						</h:panelGrid>
+					</p:panel>
+				</h:panelGroup>
+				
+				<p:spacer height="35" />
+				
+				<h:panelGroup>
+					<p:panel>
+						<p:dataTable
+							id="administrarParametrosSistemaDataTableId"
+							value="#{administrarParametrosSistemaDataManager.parametrosGenerales}"
+							var="parametroGeneral"
+							paginator="true"
+							paginatorPosition="bottom"
+							paginatorAlwaysVisible="false"
+							rows="10"
+							emptyMessage="No Existen Par&#225;metros Sistema"
+							rowIndexVar="numRow"
+							styleClass="paginador">
+							
+							<p:column styleClass="colorLabel" style="width: 3%;">
+								<f:facet name="header">
+									<h:outputText styleClass="colorLabel" value="No." />
+								</f:facet>
+								<h:outputText value="#{numRow + 1}" />
+							</p:column>
+							
+							<p:column styleClass="columnasCSS" style="width: 13%;">
+								<f:facet name="header">
+									<h:outputText styleClass="colorLabel" value="Nombre" />
+								</f:facet>
+								<p:outputLabel value="#{parametroGeneral.nombre}" />
+							</p:column>
+							
+							<p:column styleClass="columnasCSS" style="width: 55%;">
+								<f:facet name="header">
+									<h:outputText styleClass="colorLabel" value="Valor" />
+								</f:facet>
+								<p:outputLabel value="#{parametroGeneral.valor}" />
+							</p:column>
+							
+							<p:column styleClass="columnasCSS" style="width: 35%;">
+								<f:facet name="header">
+									<h:outputText styleClass="colorLabel" value="Descripci&#243;n" />
+								</f:facet>
+								<p:outputLabel value="#{parametroGeneral.descripcion}" />
+							</p:column>
+							
+							<p:column styleClass="columnasCSS" style="width: 4%;">
+								<div class="contenidoCentro">
+									<p:commandButton
+										id="modificarParametroGeneralCommandLinkId"
+										action="#{administrarParametrosSistemaControlador.inicioModificacion(parametroGeneral)}"
+										update=":frmAdministrarParametrosSistema:mensajes :frmAdministrarParametrosSistema:admParametrosSistemaPanelGroupId"
+										ajax="true"
+										process="@form"
+										title="Modificar el Par&#225;metro"
+										icon="ui-icon-pencil"
+										styleClass="boton">
+									</p:commandButton>
+								</div>
+							</p:column>
+						</p:dataTable>
+						<f:facet name="footer">
+							<div align="center">
+								<h:panelGroup styleClass="barraInferior">
+									<p:commandButton
+										id="consultarCommandButtonId"
+										action="#{administrarParametrosSistemaControlador.consultar}"
+										update=":frmAdministrarParametrosSistema:mensajes :frmAdministrarParametrosSistema:admParametrosSistemaPanelGroupId"
+										ajax="true"
+										process="@form"
+										value="Consultar"
+										title="Consultar"
+										icon="ui-icon-search"
+										styleClass="boton">
+									</p:commandButton>
+									<h:outputText value="&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;" />
+									<p:commandButton
+										id="cancelarCmdBtnId"
+										action="#{administrarParametrosSistemaControlador.cancelar}"
+										update=":frmAdministrarParametrosSistema:mensajes :frmAdministrarParametrosSistema:admParametrosSistemaPanelGroupId"
+										ajax="true"
+										process="@this"
+										value="Cancelar"
+										title="Cancelar"
+										icon="ui-icon-cancel"
+										styleClass="boton">
+									</p:commandButton>
+								</h:panelGroup>
+							</div>
+						</f:facet>
+					</p:panel>
+				</h:panelGroup>
+			</p:panel>
+			
+			<p:spacer height="35" />
+			
+			<h:panelGroup rendered="#{administrarParametrosSistemaDataManager.modoEditar}">
+				<p:panel id="editarParametroGeneralPanelId">
+					<h:outputText value="Editar Par&#225;metro General" styleClass="subtitulos" />
+					<h:panelGrid id="editarParametroGeneralPanelGridId" columns="2" cellpadding="0" cellspacing="0" border="0" columnClasses="labelFormularioGrande, contentFormularioGrande">
+						<p:outputLabel value="Nombre:" />
+						<p:inputText disabled="true" value="#{administrarParametrosSistemaDataManager.parametroGeneral.nombre}" />
+						
+						<p:outputLabel value="Valor:" />
+						<p:inputText value="#{administrarParametrosSistemaDataManager.parametroGeneral.valor}" />
+
+						<p:outputLabel value="Descripci&#243;n:" />
+						<p:inputText value="#{administrarParametrosSistemaDataManager.parametroGeneral.descripcion}" />
+					</h:panelGrid>
+					<f:facet name="footer">
+						<h:panelGroup styleClass="barraInferior">
+							<p:commandButton
+								id="cmdLinkGuardarParametroGeneralId"
+								action="#{administrarParametrosSistemaControlador.modificacion}"
+								update=":frmAdministrarParametrosSistema:mensajes :frmAdministrarParametrosSistema:admParametrosSistemaPanelGroupId"
+								ajax="true"
+								process="@form"
+								value="Modificar"
+								title="Modificar el Par&#225;metro"
+								icon="ui-icon-pencil"
+								styleClass="boton">
+							</p:commandButton>
+							<h:outputText value="&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;" />
+							<p:commandButton
+								id="cmdLinkCancelarParametroGeneralId"
+								action="#{administrarParametrosSistemaControlador.cancelarIn}"
+								update=":frmAdministrarParametrosSistema:mensajes :frmAdministrarParametrosSistema:admParametrosSistemaPanelGroupId"
+								ajax="true"
+								process="@this"
+								value="Cancelar"
+								title="Cancelar"
+								icon="ui-icon-cancel"
+								styleClass="boton">
+							</p:commandButton>
+						</h:panelGroup>
+					</f:facet>
+				</p:panel>
+			</h:panelGroup>
+		</h:panelGroup>
+	</ui:define>
+</ui:composition>

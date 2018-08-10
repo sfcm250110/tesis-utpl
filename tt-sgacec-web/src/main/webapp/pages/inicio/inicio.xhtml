@@ -1,0 +1,43 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:s="http://java.sun.com/jsf/composite/components"
+	template="/templates/ui.xhtml">
+	
+	<ui:param name="idForm" 	            value="frmInicio"					/>
+	<ui:param name="form"               	value="#{inicioControlador.form}"	/>
+	<ui:param name="controlador"        	value="#{inicioControlador}"		/>
+	<ui:param name="tituloMenuActual"       value="Inicio"						/>
+	<ui:param name="tituloOpcionUsuario"   	value="Inicio del Sistema"			/>
+	<ui:param name="tituloPaginaActual" 	value="BIENVENIDO AL SISTEMA"		/>
+	
+	<ui:define name="contentBody">
+		<p:fieldset legend="Bienvenidos">
+			<h:panelGrid columns="3" cellpadding="15">
+				<p:graphicImage name="/images/logo-utpl.png" />
+				<h:panelGrid columns="1" styleClass="panelGridCenter">
+					<h:outputText value="La Universidad Técnica Particular de Loja fue fundada por la Asociación Marista Ecuatoriana (AME) el 3 de mayo de 1971. Oficialmente reconocida por el Estado
+						Ecuatoriano bajo el Decreto Ejecutivo 646, publicado en el Registro Oficial Nro. 217 del 5 de mayo de 1971, con el cual se constituye como persona jurídica autónoma al amparo
+						del convenio de “Modus Vivendi” celebrado entre la Santa Sede y el Ecuador, teniendo en cuenta las normas de la Iglesia en su organización y gobierno.">
+					</h:outputText>
+					
+					<h:outputText value="" />
+					
+					<h:outputText value="La UTPL es una institución autónoma, con finalidad social y pública, pudiendo impartir enseñanza, desarrollar investigaciones con libertad científica-administrativa,
+						y participar en los planes de desarrollo del país, otorgar, reconocer y revalidad grados académicos y títulos profesionales; y en general, realizar las actividades propias para la
+						consecución de sus fines.">
+					</h:outputText>
+					
+					<h:outputText value="" />
+					
+					<h:outputText value="El 27 de octubre de 1997, la Diócesis de Loja traspasa por tiempo indefinido, al Instituto Id de Cristo Redentor, Misioneros y Misioneras Identes, la conducción
+						de la Universidad para que la dirija con total autonomía y en consonancia con el carisma Idente.">
+					</h:outputText>
+				</h:panelGrid>
+				<p:graphicImage name="/images/logo.png" />
+			</h:panelGrid>
+		</p:fieldset>
+	</ui:define>
+</ui:composition>

@@ -1,0 +1,277 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:s="http://java.sun.com/jsf/composite/components"
+	template="/templates/ui.xhtml">
+	
+	<ui:param name="idForm" 	            value="frmAdmValorMaximoRubroSri" 				 						/>
+	<ui:param name="form"               	value="#{admValorMaximoRubroSriController.form}" 						/>
+	<ui:param name="controlador"        	value="#{admValorMaximoRubroSriController}" 	 						/>
+	<ui:param name="tituloMenuActual"       value="Administrar Valores M&#225;ximos por Rubro del Sri" 		 		/>
+	<ui:param name="tituloOpcionUsuario"   	value="Administraci&#243;n de Valores M&#225;ximos por Rubro del Sri"  	/>
+	<ui:param name="tituloPaginaActual" 	value="VALORES M&#193;XIMOS SRI" 				  		 				/>
+	
+	<ui:define name="contentBody">
+		<h:panelGroup id="admValorMaximoRubroSriPanelGroupId">
+		
+			<h:panelGroup id="busquedaPanelGroupId" rendered="#{admValorMaximoRubroSriDataManager.mostrarValoresMaximosRubroSri}">
+				<p:panel id="busquedaPanelId">
+					<h:outputText value="Criterios de B&#250;squeda" styleClass="subtitulos" />
+					<h:panelGrid columns="1" cellpadding="0" cellspacing="0" border="0" style="width:100%">
+						<h:panelGrid columns="2" cellpadding="0" cellspacing="0" border="0" columnClasses="labelFormulario, contentFormulario">
+							<p:outputLabel value="#{i18n['lbl.periodo']}: " />
+							<p:selectOneMenu
+								value="#{admValorMaximoRubroSriDataManager.periodo}"
+								styleClass="withSelectOneMenu">
+								<f:selectItem itemLabel="Seleccione..." />
+								<f:selectItems
+									value="#{admValorMaximoRubroSriDataManager.periodos}"
+									var="periodo"
+									itemLabel="#{periodo.name}"
+									itemValue="#{periodo.value}">
+								</f:selectItems>
+							</p:selectOneMenu>
+						</h:panelGrid>
+					</h:panelGrid>
+					<f:facet name="footer">
+						<div align="center">
+							<h:panelGroup styleClass="barraInferior">
+								<p:commandButton
+									id="consultarCommandLinkId"
+									action="#{admValorMaximoRubroSriController.consultar}"
+									update=":frmAdmValorMaximoRubroSri:mensajes :frmAdmValorMaximoRubroSri:admValorMaximoRubroSriPanelGroupId"
+									ajax="true"
+									process="@form"
+									value="#{i18n['lbl.consultar']}"
+									title="#{i18n['lbl.consultar']}"
+									icon="ui-icon-search"
+									styleClass="boton">
+								</p:commandButton>
+								<h:outputText value="&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;" />
+								<p:commandButton
+									id="cancelarCmdLinkId"
+									action="#{admValorMaximoRubroSriController.cancelar}"
+									update=":frmAdmValorMaximoRubroSri:mensajes :frmAdmValorMaximoRubroSri:admValorMaximoRubroSriPanelGroupId"
+									ajax="true"
+									process="@this"
+									value="#{i18n['lbl.cancelar']}"
+									title="#{i18n['lbl.cancelar']}"
+									icon="ui-icon-search"
+									styleClass="boton">
+								</p:commandButton>
+							</h:panelGroup>
+						</div>
+					</f:facet>
+				</p:panel>
+			</h:panelGroup>
+			
+			<p:spacer height="35" />
+		
+			<h:panelGroup id="crearValorMaximoRubroSriPanelGroupId" rendered="#{admValorMaximoRubroSriDataManager.mostrarCrearValorMaximoRubroSri}">
+				<p:panel id="crearValorMaximoRubroSriPanelId">
+					<h:outputText value="Informaci&#243;n del Valor M&#225;ximo por Rubro del Sri" styleClass="subtitulos" />
+					<h:panelGrid id="informacionCrearValorMaximoRubroSriPanelGridId" columns="2" cellpadding="0" cellspacing="0" border="0" columnClasses="labelFormulario, contentFormulario">
+						<p:outputLabel value="#{i18n['lbl.rubro']}:" />
+						<p:inputText value="#{admValorMaximoRubroSriDataManager.crearValorMaximoRubroSri.rubro}" required="true" requiredMessage="#{i18n['lbl.rubro']} #{i18n['txt.requerido']}" onkeypress="return letras(event)" />
+						
+						<p:outputLabel value="#{i18n['lbl.valor']}: " />
+						<p:inputText maxlength="20" value="#{admValorMaximoRubroSriDataManager.crearValorMaximoRubroSri.valor}" required="true" requiredMessage="#{i18n['lbl.valor']} #{i18n['txt.requerido']}" />
+						
+						<p:outputLabel value="#{i18n['lbl.periodo']}:" />
+						<p:inputText value="#{admValorMaximoRubroSriDataManager.crearValorMaximoRubroSri.periodo}" required="true" requiredMessage="#{i18n['lbl.periodo']} #{i18n['txt.requerido']}" />						
+						
+						<p:outputLabel value="#{i18n['lbl.estado']}:" />
+						<p:selectOneMenu
+							value="#{admValorMaximoRubroSriDataManager.crearValorMaximoRubroSri.estado}"
+							required="true"
+							styleClass="withSelectOneMenu"
+							requiredMessage="#{i18n['lbl.estado']} #{i18n['txt.requerido']}">
+							<f:selectItem itemLabel="Seleccione..." />
+							<f:selectItems
+								value="#{admValorMaximoRubroSriDataManager.estados}"
+								var="estado"
+								itemLabel="#{estado.name}"
+								itemValue="#{estado.value}">
+							</f:selectItems>
+						</p:selectOneMenu>
+					</h:panelGrid>
+					<f:facet name="footer">
+						<div align="center">
+							<h:panelGroup styleClass="barraInferior">
+								<p:commandButton
+									id="crearValorMaximoRubroSriCommandLinkId"
+									action="#{admValorMaximoRubroSriController.crearValorMaximoRubroSri}"
+									update=":frmAdmValorMaximoRubroSri:mensajes :frmAdmValorMaximoRubroSri:admValorMaximoRubroSriPanelGroupId"
+									ajax="true"
+									process="@form"
+									value="#{i18n['lbl.crear']}"
+									title="Crear la ValorMaximoRubroSri"
+									icon="ui-icon-disk"
+									styleClass="boton">
+								</p:commandButton>
+								<h:outputText value="&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;" />
+								<p:commandButton
+									id="cancelarCrearCommandLinkId"
+									action="#{admValorMaximoRubroSriController.cancelarIn}"
+									update=":frmAdmValorMaximoRubroSri:mensajes :frmAdmValorMaximoRubroSri:admValorMaximoRubroSriPanelGroupId"
+									ajax="true"
+									process="@this"
+									value="#{i18n['lbl.cancelar']}"
+									title="Cancelar"
+									icon="ui-icon-cancel"
+									styleClass="boton">
+								</p:commandButton>
+							</h:panelGroup>
+						</div>
+					</f:facet>
+				</p:panel>
+			</h:panelGroup>
+			
+			<h:panelGroup id="modificarValorMaximoRubroSriPanelGroupId" rendered="#{admValorMaximoRubroSriDataManager.mostrarModificarValorMaximoRubroSri}">
+				<p:panel id="modificarValorMaximoRubroSriPanelId">
+					<h:outputText value="Informaci&#243;n del Valor M&#225;ximo por Rubro del Sri" styleClass="subtitulos" />
+					<h:panelGrid id="informacionValorMaximoRubroSriModificarPanelGridId" columns="2" cellpadding="0" cellspacing="0" border="0" columnClasses="labelFormulario, contentFormulario">
+						<p:outputLabel value="#{i18n['lbl.rubro']}:" />
+						<p:inputText value="#{admValorMaximoRubroSriDataManager.modificarValorMaximoRubroSri.rubro}" required="true" requiredMessage="#{i18n['lbl.rubro']} #{i18n['txt.requerido']}" onkeypress="return letras(event)" />
+						
+						<p:outputLabel value="#{i18n['lbl.valor']}: " />
+						<p:inputText value="#{admValorMaximoRubroSriDataManager.modificarValorMaximoRubroSri.valor}" required="true" requiredMessage="#{i18n['lbl.valor']} #{i18n['txt.requerido']}" />
+						
+						<p:outputLabel value="#{i18n['lbl.periodo']}:" />
+						<p:inputText value="#{admValorMaximoRubroSriDataManager.modificarValorMaximoRubroSri.periodo}" required="true" requiredMessage="#{i18n['lbl.periodo']} #{i18n['txt.requerido']}" />
+						
+						<p:outputLabel value="#{i18n['lbl.estado']}:" />
+						<p:selectOneMenu
+							value="#{admValorMaximoRubroSriDataManager.modificarValorMaximoRubroSri.estado}"
+							required="true"
+							styleClass="withSelectOneMenu"
+							requiredMessage="#{i18n['lbl.estado']} #{i18n['txt.requerido']}">
+							<f:selectItem itemLabel="Seleccione..." />
+							<f:selectItems
+								value="#{admValorMaximoRubroSriDataManager.estados}"
+								var="estado"
+								itemLabel="#{estado.name}"
+								itemValue="#{estado.value}">
+							</f:selectItems>
+						</p:selectOneMenu>
+					</h:panelGrid>
+					<f:facet name="footer">
+						<div align="center">
+							<h:panelGroup styleClass="barraInferior">
+								<p:commandButton
+									id="modificarValorMaximoRubroSriCommandLinkId"
+									action="#{admValorMaximoRubroSriController.modificarValorMaximoRubroSri}"
+									update=":frmAdmValorMaximoRubroSri:mensajes :frmAdmValorMaximoRubroSri:admValorMaximoRubroSriPanelGroupId"
+									ajax="true"
+									process="@form"
+									value="Modificar"
+									title="Modificar la ValorMaximoRubroSri"
+									icon="ui-icon-pencil"
+									styleClass="boton">
+								</p:commandButton>
+								<h:outputText value="&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;" />
+								<p:commandButton
+									id="cancelarModificarCommandLinkId"
+									action="#{admValorMaximoRubroSriController.cancelarIn}"
+									update=":frmAdmValorMaximoRubroSri:mensajes :frmAdmValorMaximoRubroSri:admValorMaximoRubroSriPanelGroupId"
+									ajax="true"
+									process="@this"
+									value="Cancelar"
+									title="Cancelar"
+									icon="ui-icon-cancel"
+									styleClass="boton">
+								</p:commandButton>
+							</h:panelGroup>
+						</div>
+					</f:facet>
+				</p:panel>
+			</h:panelGroup>
+			
+			<h:panelGroup id="nuevaValorMaximoRubroSriPanelGroupId" rendered="#{admValorMaximoRubroSriDataManager.mostrarNuevoValorMaximoRubroSri}">
+				<h:panelGroup styleClass="barraInferior">
+					<p:commandButton
+						id="nuevaValorMaximoRubroSriCommandLinkId"
+						action="#{admValorMaximoRubroSriController.nuevoValorMaximoRubroSri}"
+						update=":frmAdmValorMaximoRubroSri:mensajes :frmAdmValorMaximoRubroSri:admValorMaximoRubroSriPanelGroupId"
+						ajax="true"
+						process="@this"
+						value="#{i18n['lbl.nueva']}"
+						title="Nueva ValorMaximoRubroSri"
+						icon="ui-icon-document"
+						styleClass="boton">
+					</p:commandButton>
+				</h:panelGroup>
+			</h:panelGroup>
+			
+			<h:panelGroup id="mostrarValorMaximoRubroSrisPanelGroupId" rendered="#{admValorMaximoRubroSriDataManager.mostrarValoresMaximosRubroSri}">
+				<p:panel>
+					<p:dataTable
+						id="ValorMaximoRubroSrisDataTableId"
+						emptyMessage="#{i18n['msg.no.registros.mostrar']}" 
+						paginator="true"
+						paginatorPosition="bottom"
+						paginatorAlwaysVisible="false"
+						value="#{admValorMaximoRubroSriDataManager.valoresMaximosRubroSri}"
+						var="valorMaximoRubroSri"
+						rows="#{admValorMaximoRubroSriDataManager.maxRowsTabla}"
+						rowIndexVar="numRow"
+						styleClass="paginador">
+						
+						<p:column styleClass="colorLabel" style="width: 3%;">
+								<f:facet name="header">
+								<h:outputText styleClass="colorLabel" value="No." />
+							</f:facet>
+							<h:outputText value="#{numRow + 1}" />
+						</p:column>
+
+						<p:column styleClass="columnasCSS" style="width: 40%;">
+							<f:facet name="header">
+								<h:outputText styleClass="colorLabel" value="#{i18n['lbl.rubro']}" />
+							</f:facet>
+							<p:outputLabel value="#{valorMaximoRubroSri.rubro}" />
+						</p:column>
+						
+						<p:column styleClass="columnasCSS" style="width: 20%;">
+								<f:facet name="header">
+									<h:outputText styleClass="colorLabel" value="#{i18n['lbl.valor']}" />
+								</f:facet>
+								<h:outputText value="#{valorMaximoRubroSri.valor}" />
+							</p:column>
+						
+						<p:column styleClass="columnasCSS" style="width: 20%;">
+							<f:facet name="header">
+								<h:outputText styleClass="colorLabel" value="#{i18n['lbl.periodo']}" />
+							</f:facet>
+							<h:outputText value="#{valorMaximoRubroSri.periodo}" />
+						</p:column>
+						
+						<p:column styleClass="columnasCSS" style="width: 13%;">
+							<f:facet name="header">
+								<h:outputText styleClass="colorLabel" value="#{i18n['lbl.estado']}" />
+							</f:facet>
+							<h:outputText value="Activo" rendered="#{valorMaximoRubroSri.estado == true}" />
+							<h:outputText value="Inactivo" rendered="#{valorMaximoRubroSri.estado == false}" />
+						</p:column>
+						
+						<p:column styleClass="columnasCSS" style="width: 4%;">
+							<div class="contenidoCentro">
+								<p:commandButton
+									id="modificarValorMaximoRubroSriCommandLinkId"
+									action="#{admValorMaximoRubroSriController.inicioModificarValorMaximoRubroSri(valorMaximoRubroSri)}"
+									update=":frmAdmValorMaximoRubroSri:mensajes :frmAdmValorMaximoRubroSri:admValorMaximoRubroSriPanelGroupId"
+									ajax="true"
+									process="@this"
+									title="Modificar"
+									icon="ui-icon-pencil"
+									styleClass="boton">
+								</p:commandButton>
+							</div>
+						</p:column>
+					</p:dataTable>
+				</p:panel>
+			</h:panelGroup>
+		</h:panelGroup>
+	</ui:define>
+</ui:composition>

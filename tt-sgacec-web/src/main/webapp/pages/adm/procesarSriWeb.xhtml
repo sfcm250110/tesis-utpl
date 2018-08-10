@@ -1,0 +1,184 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:s="http://java.sun.com/jsf/composite/components"
+	template="/templates/ui.xhtml">
+	
+	<ui:param name="idForm" 	            value="frmProcesarSriWeb" 				  />
+	<ui:param name="form"               	value="#{procesarSriWebControlador.form}" />
+	<ui:param name="controlador"        	value="#{procesarSriWebControlador}" 	  />
+	<ui:param name="tituloMenuActual"       value="Procesar Portal Web Sri" 		  />
+	<ui:param name="tituloOpcionUsuario"   	value="Procesar Portal Web Sri" 		  />
+	<ui:param name="tituloPaginaActual" 	value="PROCESAR PORTAL WEB SRI" 		  />
+	
+	<ui:define name="contentBody">
+		<h:panelGroup id="generalPanelGroupId">
+			<h:panelGroup id="procesarSriWebPanelGroupId" rendered="#{procesarSriWebDataManager.mostrarProcesar}">
+				<p:panel id="modificarProcesarSriWebPanelId">
+					<h:outputText value="Informaci&#243;n Web a Procesar Sri" styleClass="subtitulos" />
+					<h:panelGrid columns="2" cellpadding="0" cellspacing="0" border="0" columnClasses="labelFormulario, contentFormulario">
+						<p:outputLabel value="#{i18n['lbl.ruc']}: " />
+						<p:outputLabel value="#{procesarSriWebDataManager.checkDownloadSri.ruc}" />
+						
+						<p:outputLabel value="#{i18n['lbl.descarga.inicio']}:" />
+						<p:outputLabel value="#{procesarSriWebDataManager.checkDownloadSri.fechaDownload}" />
+						
+						<p:outputLabel value="#{i18n['lbl.descarga.proceso']}:" />
+						<p:outputLabel value="#{procesarSriWebDataManager.checkDownloadSri.fechaProceso}" />
+						
+						<p:outputLabel value="#{i18n['lbl.fila']}: " />
+						<p:outputLabel value="#{procesarSriWebDataManager.checkDownloadSri.fila}" />
+						
+						<p:outputLabel value="#{i18n['lbl.total.filas']}: " />
+						<p:outputLabel value="#{procesarSriWebDataManager.checkDownloadSri.totalFilas}" />
+						
+						<p:outputLabel value="#{i18n['lbl.paginado']}: " />
+						<p:outputLabel value="#{procesarSriWebDataManager.checkDownloadSri.paginado}" />
+						
+						<p:outputLabel value="#{i18n['lbl.total.paginas']}: " />
+						<p:outputLabel value="#{procesarSriWebDataManager.checkDownloadSri.totalPaginas}" />
+					</h:panelGrid>
+					<f:facet name="footer">
+						<div align="center">
+							<h:panelGroup styleClass="barraInferior">
+								<p:commandButton
+									id="procesarCommandLinkId"
+									action="#{procesarSriWebControlador.procesar}"
+									update=":frmProcesarSriWeb:mensajes :frmProcesarSriWeb:generalPanelGroupId"
+									ajax="true"
+									process="@form"
+									value="#{i18n['lbl.procesar']}"
+									title="#{i18n['lbl.procesar']}"
+									icon="ui-icon-pencil"
+									styleClass="boton">
+								</p:commandButton>
+								<h:outputText value="&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;" />
+								<p:commandButton
+									id="cancelarProcesarCommandLinkId"
+									action="#{procesarSriWebControlador.cancelarIn}"
+									update=":frmProcesarSriWeb:mensajes :frmProcesarSriWeb:generalPanelGroupId"
+									ajax="true"
+									process="@this"
+									value="#{i18n['lbl.cancelar']}"
+									title="#{i18n['lbl.cancelar']}"
+									icon="ui-icon-cancel"
+									styleClass="boton">
+								</p:commandButton>
+							</h:panelGroup>
+						</div>
+					</f:facet>
+				</p:panel>
+			</h:panelGroup>
+			
+			<h:panelGroup id="procesarTodoPanelGroupId" rendered="#{procesarSriWebDataManager.mostrarProcesarTodo}">
+				<h:panelGroup styleClass="barraInferior">
+					<p:commandButton
+						id="procesarTodoCmdLinkId"
+						action="#{procesarSriWebControlador.procesarTodo}"
+						update=":frmProcesarSriWeb:mensajes :frmProcesarSriWeb:generalPanelGroupId"
+						ajax="true"
+						process="@this"
+						value="#{i18n['lbl.procesar.todo']}"
+						title="#{i18n['lbl.procesar.todo']}"
+						icon="ui-icon-document"
+						styleClass="boton">
+					</p:commandButton>
+				</h:panelGroup>
+			</h:panelGroup>
+			
+			<h:panelGroup>
+				<h:panelGroup id="verPanelGroupId" rendered="#{!procesarSriWebDataManager.mostrarProcesar}">
+					<p:panel>
+						<p:dataTable
+							id="erroresSriDataTblId"
+							emptyMessage="#{i18n['msg.no.registros.mostrar']}"
+							paginator="true"
+							paginatorPosition="bottom"
+							paginatorAlwaysVisible="false"
+							value="#{procesarSriWebDataManager.checksDownloadSri}"
+							var="checkDownloadSri"
+							rows="#{admEmpresaDataManager.maxRowsTabla}"
+							rowIndexVar="numRow"
+							styleClass="paginador">
+							
+							<p:column styleClass="colorLabel" style="width: 3%;">
+								<f:facet name="header">
+									<h:outputText styleClass="colorLabel" value="No." />
+								</f:facet>
+								<h:outputText value="#{numRow + 1}" />
+							</p:column>
+
+							<p:column styleClass="columnasCSS" style="width: 15%;">
+								<f:facet name="header">
+									<h:outputText styleClass="colorLabel" value="#{i18n['lbl.ruc']}" />
+								</f:facet>
+								<p:outputLabel value="#{checkDownloadSri.ruc}" />
+							</p:column>
+							
+							<p:column styleClass="columnasCSS" style="width: 15%;">
+								<f:facet name="header">
+									<h:outputText styleClass="colorLabel" value="#{i18n['lbl.descarga.inicio']}" />
+								</f:facet>
+								<p:outputLabel value="#{checkDownloadSri.fechaDownload}" />
+							</p:column>
+							
+							<p:column styleClass="columnasCSS" style="width: 15%;">
+								<f:facet name="header">
+									<h:outputText styleClass="colorLabel" value="#{i18n['lbl.descarga.proceso']}" />
+								</f:facet>
+								<p:outputLabel value="#{checkDownloadSri.fechaProceso}" />
+							</p:column>
+							
+							<p:column styleClass="columnasCSS" style="width: 12%;">
+								<f:facet name="header">
+									<h:outputText styleClass="colorLabel" value="#{i18n['lbl.fila']}" />
+								</f:facet>
+								<p:outputLabel value="#{checkDownloadSri.fila}" />
+							</p:column>
+							
+							<p:column styleClass="columnasCSS" style="width: 10%;">
+								<f:facet name="header">
+									<h:outputText styleClass="colorLabel" value="#{i18n['lbl.total.filas']}" />
+								</f:facet>
+								<p:outputLabel value="#{checkDownloadSri.totalFilas}" />
+							</p:column>
+							
+							<p:column styleClass="columnasCSS" style="width: 10%;">
+								<f:facet name="header">
+									<h:outputText styleClass="colorLabel" value="#{i18n['lbl.paginado']}" />
+								</f:facet>
+								<p:outputLabel value="#{checkDownloadSri.paginado}" />
+							</p:column>
+							
+							<p:column styleClass="columnasCSS" style="width: 10%;">
+								<f:facet name="header">
+									<h:outputText styleClass="colorLabel" value="#{i18n['lbl.total.paginas']}" />
+								</f:facet>
+								<p:outputLabel value="#{checkDownloadSri.totalPaginas}" />
+							</p:column>
+							
+							<p:column styleClass="columnasCSS" style="width: 10%;">
+								<f:facet name="header">
+									<h:outputText styleClass="colorLabel" value="#{i18n['lbl.procesar']}" />
+								</f:facet>
+								<div class="contenidoCentro">
+									<p:commandButton
+										action="#{procesarSriWebControlador.inicioProcesar(checkDownloadSri)}"
+										update=":frmProcesarSriWeb:mensajes :frmProcesarSriWeb:generalPanelGroupId"
+										ajax="true"
+										process="@this"
+										title="#{i18n['lbl.procesar']}"
+										icon="ui-icon-pencil"
+										styleClass="boton">
+									</p:commandButton>
+								</div>
+							</p:column>
+						</p:dataTable>
+					</p:panel>
+				</h:panelGroup>
+			</h:panelGroup>
+		</h:panelGroup>
+	</ui:define>
+</ui:composition>
