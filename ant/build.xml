@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- ================================================ -->
+<!-- Ant Build                                        -->
+<!-- Elaborado por Santiago Cabrera M.			      -->
+<!-- ================================================ -->
+
+<project name="tt-utpl" default="copy" basedir=".">
+
+	<!-- Archivo de propiedades -->
+	<property file="build.properties" />
+
+	<!-- =================================================================== -->
+	<!-- Clean                                                               -->
+	<!-- =================================================================== -->
+	<target name="clean">
+		<echo message="Clean tmp server JBoss" />
+		
+		<delete dir="${standalone.data.dir}" />
+		<echo message="Data borrado" />
+			
+		<delete dir="${standalone.log.dir}" />
+		<echo message="Log borrrado" />
+		
+		<delete dir="${standalone.tmp.dir}" />
+		<echo message="Tmp borrado" />
+	</target>
+	
+	<!-- =================================================================== -->
+	<!-- Copy                                                                -->
+	<!-- =================================================================== -->
+	<target name="copy" depends="clean">
+		<echo message="Copiando ear a Jboss" />
+		<copy file="${maven.tt-sgacec-ear.ear}" todir="${standalone.deployments.dir}" />
+	</target>
+	
+	<!-- =============================================================== -->
+	<!-- Maven                                                           -->
+	<!-- =============================================================== -->
+	<target name="mvn" depends="copy">
+		<exec dir="${workspace.home}" executable="cmd">
+			<arg value="/c" />
+			<arg value="mvn.bat" />
+			<arg line="-o clean install -Dmaven.test.skip=true" />
+		</exec>
+	</target>
+
+</project>
