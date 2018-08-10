@@ -1,0 +1,7 @@
+<root>
+  <facet id="jpt.jaxb">
+    <node name="classgen">
+      <attribute name="package" value="ec.edu.utpl.sc.core.xsd.v110"/>
+    </node>
+  </facet>
+</root>

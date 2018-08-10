@@ -1,0 +1,149 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:jee="http://www.springframework.org/schema/jee"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:task="http://www.springframework.org/schema/task"
+	xsi:schemaLocation="http://www.springframework.org/schema/aop 
+	http://www.springframework.org/schema/aop/spring-aop.xsd 
+	http://www.springframework.org/schema/beans 
+	http://www.springframework.org/schema/beans/spring-beans.xsd 
+	http://www.springframework.org/schema/context 
+	http://www.springframework.org/schema/context/spring-context.xsd  
+	http://www.springframework.org/schema/tx 
+	http://www.springframework.org/schema/tx/spring-tx.xsd
+	http://www.springframework.org/schema/jee 
+	http://www.springframework.org/schema/jee/spring-jee.xsd">
+
+	<context:component-scan base-package="ec.edu.utpl.sc.core" />
+
+	<tx:annotation-driven transaction-manager="transactionManager" />
+
+	<!--
+	<bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+		<property name="driverClassName" value="org.postgresql.Driver" />
+		<property name="url" value="jdbc:postgresql://127.0.0.1:5432/tt-sgacec-utpl" />
+		<property name="username" value="postgres" />
+		<property name="password" value="root" />
+	</bean>
+	-->
+	
+	<jee:jndi-lookup id="dataSource" jndi-name="java:/jboss/ds/ttSgacecDs" />
+
+	<bean id="sessionFactory" class="org.springframework.orm.hibernate5.LocalSessionFactoryBean">
+		<property name="dataSource" ref="dataSource" />
+		<property name="annotatedClasses">
+			<list>
+				<value>ec.edu.utpl.sc.core.entity.Usuario</value>
+				<value>ec.edu.utpl.sc.core.entity.ParametroGeneral</value>
+				<value>ec.edu.utpl.sc.core.entity.Empresa</value>
+				<value>ec.edu.utpl.sc.core.entity.CheckDownloadSri</value>
+				<value>ec.edu.utpl.sc.core.entity.Rol</value>
+				<value>ec.edu.utpl.sc.core.entity.RolUsuario</value>
+				<value>ec.edu.utpl.sc.core.entity.PreguntaSeguridad</value>
+				<value>ec.edu.utpl.sc.core.entity.UsuarioEmpresa</value>
+				<value>ec.edu.utpl.sc.core.entity.ComprobanteFisico</value>
+				<value>ec.edu.utpl.sc.core.entity.ValorMaximoRubroSri</value>
+				<value>ec.edu.utpl.sc.core.entity.InfoRucSri</value>
+				<value>ec.edu.utpl.sc.core.entity.ErrorSistema</value>
+			</list>
+		</property>
+		<property name="hibernateProperties">
+			<props>
+				<prop key="hibernate.dialect">org.hibernate.dialect.PostgreSQLDialect</prop>
+				<prop key="hibernate.show_sql">true</prop>
+				<prop key="hibernate.format_sql">true</prop>
+			</props>
+		</property>
+	</bean>
+
+	<bean id="transactionManager" class="org.springframework.orm.hibernate5.HibernateTransactionManager" p:sessionFactory-ref="sessionFactory" />
+	
+	<!-- Queues -->
+	<bean id="jmsConnectionFactory" class="org.apache.activemq.ActiveMQConnectionFactory"
+		p:brokerURL="failover:(tcp://127.0.0.1:61616)?randomize=false;maxReconnectDelay=1000"
+		p:userName="admin" 
+		p:password="admin" 
+		p:alwaysSessionAsync="false"
+		p:useAsyncSend = "false"
+		p:CopyMessageOnSend = "false"
+		p:optimizeAcknowledge ="true"
+		p:optimizedMessageDispatch="false">
+	</bean>
+	
+	<bean id="cachedConnectionFactory" class="org.apache.activemq.pool.PooledConnectionFactory"
+		init-method="start" destroy-method="stop">
+		<property name="idleTimeout" value="0" />
+		<property name="maxConnections" value="10" />
+		<property name="maximumActiveSessionPerConnection" value="500" />
+		<property name="connectionFactory" ref="jmsConnectionFactory" />
+	</bean>
+	
+	<bean id="messageDownloadComprobantesSriListener" class="ec.edu.utpl.sc.core.queue.listener.DownloadComprobantesSriListener" />
+
+	<bean id="downloadComprobantesSriListener" class="org.springframework.jms.listener.DefaultMessageListenerContainer">
+        <property name="connectionFactory" ref="cachedConnectionFactory" />
+        <property name="messageListener" ref="messageDownloadComprobantesSriListener" />
+        <property name="concurrency" value="10-30" />
+        <property name="destinationName" value="DOW.COM.SRI.REQ" />
+        <property name="sessionAcknowledgeModeName" value="AUTO_ACKNOWLEDGE" />
+        <property name="cacheLevelName" value="CACHE_CONSUMER" />
+    </bean>
+    
+    <bean id="messageDownloadComprobantesSriWsListener" class="ec.edu.utpl.sc.core.queue.listener.DownloadComprobantesSriWsListener" />
+
+	<bean id="downloadComprobantesSriWsListener" class="org.springframework.jms.listener.DefaultMessageListenerContainer">
+        <property name="connectionFactory" ref="cachedConnectionFactory" />
+        <property name="messageListener" ref="messageDownloadComprobantesSriWsListener" />
+        <property name="concurrency" value="10-30" />
+        <property name="destinationName" value="DOW.COM.SRI.WS.REQ" />
+        <property name="sessionAcknowledgeModeName" value="AUTO_ACKNOWLEDGE" />
+        <property name="cacheLevelName" value="CACHE_CONSUMER" />
+    </bean>
+    
+    <bean id="messageDownloadInfoRucSriListener" class="ec.edu.utpl.sc.core.queue.listener.DownloadInfoRucSriListener" />
+
+	<bean id="downloadInfoRucSriListener" class="org.springframework.jms.listener.DefaultMessageListenerContainer">
+        <property name="connectionFactory" ref="cachedConnectionFactory" />
+        <property name="messageListener" ref="messageDownloadInfoRucSriListener" />
+        <property name="concurrency" value="10-30" />
+        <property name="destinationName" value="DOW.RUC.EMI.SRI.REQ" />
+        <property name="sessionAcknowledgeModeName" value="AUTO_ACKNOWLEDGE" />
+        <property name="cacheLevelName" value="CACHE_CONSUMER" />
+    </bean>
+    
+    <bean id="messageClasificarComprobanteAnexoListener" class="ec.edu.utpl.sc.core.queue.listener.ClasificarComprobanteAnexoListener" />
+
+	<bean id="clasificarComprobanteAnexoListener" class="org.springframework.jms.listener.DefaultMessageListenerContainer">
+        <property name="connectionFactory" ref="cachedConnectionFactory" />
+        <property name="messageListener" ref="messageClasificarComprobanteAnexoListener" />
+        <property name="concurrency" value="10-30" />
+        <property name="destinationName" value="CLA.COM.ANE.REQ" />
+        <property name="sessionAcknowledgeModeName" value="AUTO_ACKNOWLEDGE" />
+        <property name="cacheLevelName" value="CACHE_CONSUMER" />
+    </bean>
+    
+    <bean id="messageDownloadFechaSriListener" class="ec.edu.utpl.sc.core.queue.listener.DownloadFechaSriListener" />
+
+	<bean id="downloadFechaSriListener" class="org.springframework.jms.listener.DefaultMessageListenerContainer">
+        <property name="connectionFactory" ref="cachedConnectionFactory" />
+        <property name="messageListener" ref="messageDownloadFechaSriListener" />
+        <property name="concurrency" value="10-30" />
+        <property name="destinationName" value="DOW.FEC.SRI.REQ" />
+        <property name="sessionAcknowledgeModeName" value="AUTO_ACKNOWLEDGE" />
+        <property name="cacheLevelName" value="CACHE_CONSUMER" />
+    </bean>
+    
+    <bean id="messageSendEmailListener" class="ec.edu.utpl.sc.core.queue.listener.SendEmailListener" />
+
+	<bean id="sendEmailListener" class="org.springframework.jms.listener.DefaultMessageListenerContainer">
+        <property name="connectionFactory" ref="cachedConnectionFactory" />
+        <property name="messageListener" ref="messageSendEmailListener" />
+        <property name="concurrency" value="10-30" />
+        <property name="destinationName" value="SEN.MAIL.REQ" />
+        <property name="sessionAcknowledgeModeName" value="AUTO_ACKNOWLEDGE" />
+        <property name="cacheLevelName" value="CACHE_CONSUMER" />
+    </bean>
+</beans>

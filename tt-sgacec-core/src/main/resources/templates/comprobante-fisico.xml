@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<workbook>
+    <worksheet name="Sheet1">
+		<section startRow="0" endRow="0">
+		</section>
+        <loop startRow="1" endRow="1" items="comprobantesFisicos" var="comprobanteFisico" varType="ec.edu.utpl.sc.core.entity.ComprobanteFisico">
+        	<section startRow="1" endRow="1">
+                <mapping row="1" col="0"  type="java.lang.String">comprobanteFisico.rucEmisor</mapping>
+                <mapping row="1" col="1"  type="java.lang.String">comprobanteFisico.razonSocialEmisor</mapping>
+                <mapping row="1" col="2"  type="java.lang.String">comprobanteFisico.numeroAutorizacion</mapping>
+                <mapping row="1" col="3"  type="java.lang.String">comprobanteFisico.establecimiento</mapping>
+                <mapping row="1" col="4"  type="java.lang.String">comprobanteFisico.puntoEmision</mapping>
+                <mapping row="1" col="5"  type="java.lang.String">comprobanteFisico.secuencial</mapping>
+				<mapping row="1" col="6"  type="java.util.Date">comprobanteFisico.fechaEmision</mapping>
+				<mapping row="1" col="7"  type="java.lang.Double">comprobanteFisico.baseImponible</mapping>
+                <mapping row="1" col="8"  type="java.lang.Integer">comprobanteFisico.iva</mapping>
+                <mapping row="1" col="9"  type="java.lang.Double">comprobanteFisico.total</mapping>
+                <mapping row="1" col="10" type="java.lang.Double">comprobanteFisico.vivienda</mapping>
+                <mapping row="1" col="11" type="java.lang.Double">comprobanteFisico.educacion</mapping>
+                <mapping row="1" col="12" type="java.lang.Double">comprobanteFisico.alimentacion</mapping>
+                <mapping row="1" col="13" type="java.lang.Double">comprobanteFisico.vestimenta</mapping>
+                <mapping row="1" col="14" type="java.lang.Double">comprobanteFisico.salud</mapping> 
+            </section>
+            <loopbreakcondition>
+                <rowcheck offset="0">
+                    <cellcheck offset="0" />
+                </rowcheck>
+            </loopbreakcondition>
+        </loop>
+    </worksheet>
+</workbook>

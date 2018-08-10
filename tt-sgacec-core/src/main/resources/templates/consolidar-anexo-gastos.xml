@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<workbook>
+    <worksheet name="resumen">
+		<section startRow="0" endRow="0">
+			<mapping cell="B2">anexoGasto.periodo</mapping>
+			<mapping cell="B3">anexoGasto.ruc</mapping>
+		</section>
+    </worksheet>
+	
+	<worksheet name="comprobantes-sin-clasificar">
+		<section startRow="0" endRow="0" />
+		
+		<loop startRow="1" endRow="1" items="comprobantesSinClasificar" var="comprobanteSinClasificar" varType="ec.edu.utpl.sc.core.util.Comprobante">
+        	<section startRow="1" endRow="1">
+                <mapping row="1" col="0"  type="java.lang.String">comprobanteSinClasificar.rucEmisor</mapping>
+				<mapping row="1" col="2"  type="java.lang.String">comprobanteSinClasificar.razonSocialEmisor</mapping>
+				<mapping row="1" col="4"  type="java.lang.String">comprobanteSinClasificar.numeroComprobante</mapping>
+				<mapping row="1" col="6"  type="java.lang.String">comprobanteSinClasificar.tipo</mapping>
+				<mapping row="1" col="7"  type="java.lang.Double">comprobanteSinClasificar.baseImponible</mapping>
+				<mapping row="1" col="8"  type="java.lang.Double">comprobanteSinClasificar.vivienda</mapping>
+                <mapping row="1" col="9"  type="java.lang.Double">comprobanteSinClasificar.educacion</mapping>
+                <mapping row="1" col="10" type="java.lang.Double">comprobanteSinClasificar.alimentacion</mapping>
+                <mapping row="1" col="11" type="java.lang.Double">comprobanteSinClasificar.vestimenta</mapping>
+                <mapping row="1" col="12" type="java.lang.Double">comprobanteSinClasificar.salud</mapping>
+            </section>
+            <loopbreakcondition>
+                <rowcheck offset="0">
+                    <cellcheck offset="0" />
+                </rowcheck>
+            </loopbreakcondition>
+        </loop>
+    </worksheet>
+	
+	<worksheet name="comprobantes-clasificados">
+		<section startRow="0" endRow="0" />
+		
+		<loop startRow="1" endRow="1" items="comprobantesClasificados" var="comprobanteClasificados" varType="ec.edu.utpl.sc.core.util.Comprobante">
+        	<section startRow="1" endRow="1">
+                <mapping row="1" col="0"  type="java.lang.String">comprobanteClasificados.rucEmisor</mapping>
+				<mapping row="1" col="2"  type="java.lang.String">comprobanteClasificados.razonSocialEmisor</mapping>
+				<mapping row="1" col="4"  type="java.lang.String">comprobanteClasificados.numeroComprobante</mapping>
+				<mapping row="1" col="6"  type="java.lang.String">comprobanteClasificados.tipo</mapping>
+				<mapping row="1" col="7"  type="java.lang.Double">comprobanteClasificados.baseImponible</mapping>
+				<mapping row="1" col="8"  type="java.lang.Double">comprobanteClasificados.vivienda</mapping>
+                <mapping row="1" col="9"  type="java.lang.Double">comprobanteClasificados.educacion</mapping>
+                <mapping row="1" col="10" type="java.lang.Double">comprobanteClasificados.alimentacion</mapping>
+                <mapping row="1" col="11" type="java.lang.Double">comprobanteClasificados.vestimenta</mapping>
+                <mapping row="1" col="12" type="java.lang.Double">comprobanteClasificados.salud</mapping>
+            </section>
+            <loopbreakcondition>
+                <rowcheck offset="0">
+                    <cellcheck offset="0" />
+                </rowcheck>
+            </loopbreakcondition>
+        </loop>
+    </worksheet>
+</workbook>
